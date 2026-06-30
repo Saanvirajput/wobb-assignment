@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -11,13 +11,16 @@ import {
   Eye,
   Plus,
   Check,
+  Play,
   ExternalLink,
 } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
+import { MediaCycler } from "@/components/MediaCycler";
+import { SparkleBurst } from "@/components/SparkleBurst";
 import type { FullUserProfile, ProfileDetailResponse, Platform } from "@/types";
 import { formatCompact, formatEngagementRate } from "@/utils/formatters";
-import { loadProfileByUsername } from "@/utils/profileLoader";
+import { extractClipFrames, loadProfileByUsername } from "@/utils/profileLoader";
 import { useListStore } from "@/store/useListStore";
 import { PLATFORM_META } from "@/utils/dataHelpers";
 import { cn } from "@/utils/cn";
@@ -113,6 +116,19 @@ export function ProfileDetailPage() {
     user ? s.isSelected(user.username) : false
   );
   const toggleProfile = useListStore((s) => s.toggleProfile);
+  const [burst, setBurst] = useState(false);
+
+  const clipFrames = useMemo(() => (user ? extractClipFrames(user) : []), [user]);
+
+  const handleToggle = () => {
+    if (!user) return;
+    const willAdd = !isAdded;
+    toggleProfile(user, platform);
+    if (willAdd) {
+      setBurst(true);
+      window.setTimeout(() => setBurst(false), 550);
+    }
+  };
 
   useEffect(() => {
     document.title = username ? `@${username} — Vibe` : "Vibe — Influencer Search";
@@ -172,20 +188,38 @@ export function ProfileDetailPage() {
           <div className="h-24 bg-gradient-to-r from-brand-600 to-violet-500" />
           <div className="px-6 pb-6 sm:px-8 sm:pb-8">
             <div className="-mt-12 flex flex-col items-center text-center sm:flex-row sm:items-end sm:text-left">
-              {avatarFailed ? (
-                <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-slate-100 text-3xl font-semibold text-ink-400 ring-4 ring-white">
-                  {(user.username || user.fullname || "?").charAt(0).toUpperCase()}
-                </div>
-              ) : (
-                <img
-                  src={user.picture}
-                  alt={`${user.username}'s avatar`}
-                  onError={() =>
-                    setAvatarState({ username: user.username, failed: true })
-                  }
-                  className="h-24 w-24 rounded-2xl object-cover ring-4 ring-white"
-                />
-              )}
+              <div className="relative h-24 w-24 shrink-0">
+                {avatarFailed ? (
+                  <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-slate-100 text-3xl font-semibold text-ink-400 ring-4 ring-white">
+                    {(user.username || user.fullname || "?").charAt(0).toUpperCase()}
+                  </div>
+                ) : (
+                  <img
+                    src={user.picture}
+                    alt={`${user.username}'s avatar`}
+                    onError={() =>
+                      setAvatarState({ username: user.username, failed: true })
+                    }
+                    className="h-24 w-24 rounded-2xl object-cover ring-4 ring-white"
+                  />
+                )}
+                {clipFrames.length > 0 && (
+                  <>
+                    <MediaCycler
+                      frames={clipFrames}
+                      playing
+                      className="absolute inset-0 overflow-hidden rounded-2xl ring-4 ring-white"
+                    />
+                    <span
+                      className="absolute -left-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-ink-900 text-white ring-2 ring-white"
+                      title="Playing recent clips"
+                      aria-hidden="true"
+                    >
+                      <Play className="h-3 w-3 fill-white" strokeWidth={0} />
+                    </span>
+                  </>
+                )}
+              </div>
               <div className="mt-4 sm:ml-5 sm:mt-0 sm:pb-1">
                 <div className="flex items-center justify-center gap-1.5 sm:justify-start">
                   <h1 className="text-2xl font-semibold tracking-[-0.02em] text-ink-900">
@@ -215,15 +249,16 @@ export function ProfileDetailPage() {
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <button
-                onClick={() => toggleProfile(user, platform)}
+                onClick={handleToggle}
                 aria-pressed={isAdded}
                 className={cn(
-                  "btn-pill inline-flex flex-1 items-center justify-center gap-2 px-5 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
+                  "btn-pill relative inline-flex flex-1 items-center justify-center gap-2 px-5 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
                   isAdded
                     ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200 hover:bg-emerald-100"
                     : "bg-ink-900 text-white shadow-sm hover:bg-brand-600"
                 )}
               >
+                <SparkleBurst active={burst} />
                 {isAdded ? (
                   <>
                     <Check className="h-4 w-4" /> Added to list

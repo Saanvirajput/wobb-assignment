@@ -1,10 +1,13 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Check, Plus, Users } from "lucide-react";
+import { Check, Plus, Play, Users } from "lucide-react";
 import type { Platform, UserProfileSummary } from "@/types";
 import { VerifiedBadge } from "./VerifiedBadge";
+import { CreatorClip } from "./CreatorClip";
+import { SparkleBurst } from "./SparkleBurst";
 import { useListStore } from "@/store/useListStore";
 import { PLATFORM_META } from "@/utils/dataHelpers";
+import { hasLinkedProfile } from "@/utils/profileLoader";
 import { formatCompact, formatEngagementRate } from "@/utils/formatters";
 import { cn } from "@/utils/cn";
 
@@ -18,6 +21,10 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
   const isAdded = useListStore((s) => s.isSelected(profile.username));
   const toggleProfile = useListStore((s) => s.toggleProfile);
   const [imgFailed, setImgFailed] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [burst, setBurst] = useState(false);
+
+  const linked = useMemo(() => hasLinkedProfile(profile.username), [profile.username]);
 
   const goToProfile = useCallback(() => {
     navigate(`/profile/${profile.username}?platform=${platform}`);
@@ -26,9 +33,14 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
   const handleToggle = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
+      const willAdd = !isAdded;
       toggleProfile(profile, platform);
+      if (willAdd) {
+        setBurst(true);
+        window.setTimeout(() => setBurst(false), 550);
+      }
     },
-    [toggleProfile, profile, platform]
+    [isAdded, toggleProfile, profile, platform]
   );
 
   const meta = PLATFORM_META[platform];
@@ -42,6 +54,10 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
           goToProfile();
         }
       }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
       role="button"
       tabIndex={0}
       aria-label={`View ${profile.fullname} (@${profile.username})`}
@@ -61,6 +77,16 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
               onError={() => setImgFailed(true)}
               className="h-16 w-16 rounded-full object-cover ring-2 ring-slate-100"
             />
+          )}
+          {linked && <CreatorClip username={profile.username} active={hovered} />}
+          {linked && (
+            <span
+              className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-ink-900 text-white ring-2 ring-white"
+              title="Recent clips available"
+              aria-hidden="true"
+            >
+              <Play className="h-2.5 w-2.5 fill-white" strokeWidth={0} />
+            </span>
           )}
           <span
             className={cn(
@@ -116,12 +142,13 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
             : `Add ${profile.username} to list`
         }
         className={cn(
-          "btn-pill mt-5 inline-flex w-full items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
+          "btn-pill relative mt-5 inline-flex w-full items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
           isAdded
             ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200 hover:bg-emerald-100"
             : "bg-ink-900 text-white shadow-sm hover:bg-brand-600"
         )}
       >
+        <SparkleBurst active={burst} />
         {isAdded ? (
           <>
             <Check className="h-4 w-4" /> Added

@@ -26,6 +26,12 @@ export interface SearchData {
   accounts: SearchAccount[];
 }
 
+export interface MediaItem {
+  type?: string;
+  image?: string;
+  thumbnail?: string;
+}
+
 export interface FullUserProfile extends UserProfileSummary {
   type?: string;
   description?: string;
@@ -36,6 +42,9 @@ export interface FullUserProfile extends UserProfileSummary {
   avg_reels_plays?: number;
   gender?: string;
   age_group?: string;
+  top_reels?: MediaItem[];
+  recent_reels?: MediaItem[];
+  top_posts?: MediaItem[];
 }
 
 export interface ProfileDetailResponse {
