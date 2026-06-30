@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.1",
@@ -15,7 +16,6 @@
     "framer-motion": "^12.42.1",
     "lucide-react": "^1.22.0",
     "react": "^19.2.6",
-    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.18.0",
     "tailwind-merge": "^3.6.0",

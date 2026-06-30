@@ -14,8 +14,8 @@ const ProfileDetailPage = lazy(() =>
 
 function PageLoader() {
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
-      <div className="animate-spin rounded-none h-16 w-16 border-4 border-zinc-800 border-t-white" />
+    <div className="flex min-h-screen items-center justify-center bg-slate-50">
+      <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-brand-600" />
     </div>
   );
 }

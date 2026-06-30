@@ -1,114 +1,139 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Check, Plus } from "lucide-react";
+import { Check, Plus, Users } from "lucide-react";
 import type { Platform, UserProfileSummary } from "@/types";
 import { VerifiedBadge } from "./VerifiedBadge";
 import { useListStore } from "@/store/useListStore";
+import { PLATFORM_META } from "@/utils/dataHelpers";
+import { formatCompact, formatEngagementRate } from "@/utils/formatters";
 import { cn } from "@/utils/cn";
 
 interface ProfileCardProps {
   profile: UserProfileSummary;
   platform: Platform;
-  searchQuery: string;
-  onProfileClick?: (username: string) => void;
 }
 
-function formatFollowersLocal(count: number) {
-  if (count >= 1000000) return (count / 1000000).toFixed(1) + "M followers";
-  if (count >= 1000) return (count / 1000).toFixed(0) + "K followers";
-  return count + " followers";
-}
-
-export const ProfileCard = memo(function ProfileCard({
-  profile,
-  platform,
-  searchQuery,
-  onProfileClick,
-}: ProfileCardProps) {
+function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
   const navigate = useNavigate();
-  const { addProfile, removeProfile, isProfileAdded } = useListStore();
-  const isAdded = isProfileAdded(profile.username);
+  const isAdded = useListStore((s) => s.isSelected(profile.username));
+  const toggleProfile = useListStore((s) => s.toggleProfile);
+  const [imgFailed, setImgFailed] = useState(false);
 
-  const handleClick = useCallback(() => {
-    if (onProfileClick) onProfileClick(profile.username);
+  const goToProfile = useCallback(() => {
     navigate(`/profile/${profile.username}?platform=${platform}`);
-  }, [navigate, onProfileClick, profile.username, platform]);
+  }, [navigate, profile.username, platform]);
 
-  const handleListToggle = useCallback(
+  const handleToggle = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      if (isAdded) {
-        removeProfile(profile.username);
-      } else {
-        addProfile(profile, platform);
-      }
+      toggleProfile(profile, platform);
     },
-    [isAdded, addProfile, removeProfile, profile, platform]
+    [toggleProfile, profile, platform]
   );
 
+  const meta = PLATFORM_META[platform];
+
   return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      onClick={handleClick}
-      role="link"
-      tabIndex={0}
-      aria-label={`View profile of ${profile.fullname} (@${profile.username})`}
+    <div
+      onClick={goToProfile}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          handleClick();
+          goToProfile();
         }
       }}
-      className="flex flex-col sm:flex-row items-center gap-6 p-6 mb-4 w-full max-w-3xl liquid-silver group cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-coke-red/30"
-      data-search={searchQuery}
+      role="button"
+      tabIndex={0}
+      aria-label={`View ${profile.fullname} (@${profile.username})`}
+      className="card group flex cursor-pointer flex-col p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
     >
-      <img
-        src={profile.picture}
-        alt={`Profile of ${profile.username}`}
-        loading="lazy"
-        className="w-20 h-20 object-cover border border-slate-300 droplet-shape grayscale group-hover:grayscale-0 transition-all duration-500 relative z-10"
-      />
-      <div className="text-center sm:text-left flex-1 min-w-0 relative z-10">
-        <div className="font-black text-slate-900 flex items-center justify-center sm:justify-start gap-2 text-2xl md:text-3xl tracking-tighter uppercase truncate">
-          @{profile.username}
-          <VerifiedBadge verified={profile.is_verified} />
+      <div className="flex items-start gap-4">
+        <div className="relative shrink-0">
+          {imgFailed ? (
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-lg font-bold text-slate-400 ring-2 ring-slate-100">
+              {profile.username.charAt(0).toUpperCase()}
+            </div>
+          ) : (
+            <img
+              src={profile.picture}
+              alt={`${profile.username}'s avatar`}
+              loading="lazy"
+              onError={() => setImgFailed(true)}
+              className="h-16 w-16 rounded-full object-cover ring-2 ring-slate-100"
+            />
+          )}
+          <span
+            className={cn(
+              "absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full ring-2 ring-white",
+              meta.dotClass
+            )}
+            aria-hidden="true"
+          />
         </div>
-        <div className="text-base text-slate-600 font-medium truncate mt-1">
-          {profile.fullname}
-        </div>
-        <div className="text-sm text-slate-500 mt-2 font-bold tracking-widest uppercase">
-          {formatFollowersLocal(profile.followers)}
+
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <h3 className="truncate font-semibold text-slate-900">
+              {profile.fullname}
+            </h3>
+            <VerifiedBadge verified={profile.is_verified} className="h-4 w-4" />
+          </div>
+          <p className="truncate text-sm text-slate-500">@{profile.username}</p>
+          <span
+            className={cn(
+              "mt-2 inline-block rounded-full px-2.5 py-0.5 text-[11px] font-semibold tracking-wide",
+              meta.badgeClass
+            )}
+          >
+            {meta.label}
+          </span>
         </div>
       </div>
 
+      <dl className="mt-5 grid grid-cols-2 gap-3 border-t border-slate-100 pt-4">
+        <div>
+          <dt className="flex items-center gap-1 text-xs font-medium text-slate-400">
+            <Users className="h-3.5 w-3.5" /> Followers
+          </dt>
+          <dd className="mt-0.5 text-lg font-bold text-slate-900">
+            {formatCompact(profile.followers)}
+          </dd>
+        </div>
+        <div>
+          <dt className="text-xs font-medium text-slate-400">Engagement</dt>
+          <dd className="mt-0.5 text-lg font-bold text-slate-900">
+            {formatEngagementRate(profile.engagement_rate)}
+          </dd>
+        </div>
+      </dl>
+
       <button
-        onClick={handleListToggle}
+        onClick={handleToggle}
+        aria-pressed={isAdded}
         aria-label={
           isAdded
             ? `Remove ${profile.username} from list`
             : `Add ${profile.username} to list`
         }
         className={cn(
-          "w-full sm:w-auto flex justify-center items-center gap-2 px-8 py-4 text-sm font-black uppercase tracking-widest transition-all duration-300 border mt-4 sm:mt-0 focus:outline-none focus:ring-2 focus:ring-coke-red/30 relative z-10",
+          "mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
           isAdded
-            ? "coke-panel border-coke"
-            : "bg-transparent text-slate-700 border-slate-400 hover:border-coke hover:text-coke"
+            ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200 hover:bg-emerald-100"
+            : "bg-brand-600 text-white shadow-sm shadow-brand-600/30 hover:bg-brand-700"
         )}
       >
         {isAdded ? (
           <>
-            <Check className="w-5 h-5" />
-            <span>Added</span>
+            <Check className="h-4 w-4" /> Added
           </>
         ) : (
           <>
-            <Plus className="w-5 h-5" />
-            <span>Add</span>
+            <Plus className="h-4 w-4" /> Add to list
           </>
         )}
       </button>
-    </motion.div>
+    </div>
   );
-});
+}
+
+export const ProfileCard = memo(ProfileCardComponent);

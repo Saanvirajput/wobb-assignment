@@ -1,49 +1,48 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
-import { X, Trash2, Users, Download } from "lucide-react";
+import { X, Trash2, Users, Download, ListChecks } from "lucide-react";
 import { useListStore } from "@/store/useListStore";
+import { PLATFORM_META } from "@/utils/dataHelpers";
+import { formatCompact } from "@/utils/formatters";
 import { cn } from "@/utils/cn";
 
 export function SelectedProfilesDrawer() {
   const [isOpen, setIsOpen] = useState(false);
-  const { selectedProfiles, removeProfile } = useListStore();
+  const selectedProfiles = useListStore((s) => s.selectedProfiles);
+  const removeProfile = useListStore((s) => s.removeProfile);
+  const clear = useListStore((s) => s.clear);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Focus trap: focus close button when drawer opens
+  const count = selectedProfiles.length;
+
   useEffect(() => {
-    if (isOpen && closeButtonRef.current) {
-      closeButtonRef.current.focus();
-    }
+    if (isOpen) closeButtonRef.current?.focus();
   }, [isOpen]);
 
-  // Close on Escape key
   useEffect(() => {
     if (!isOpen) return;
-
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIsOpen(false);
     };
-
-    // Prevent body scroll when drawer is open
     document.body.style.overflow = "hidden";
     document.addEventListener("keydown", handleEscape);
-
     return () => {
       document.body.style.overflow = "";
       document.removeEventListener("keydown", handleEscape);
     };
   }, [isOpen]);
 
-  const handleProceed = useCallback(() => {
-    const data = JSON.stringify(selectedProfiles, null, 2);
-    const blob = new Blob([data], { type: "application/json" });
+  const handleExport = useCallback(() => {
+    const blob = new Blob([JSON.stringify(selectedProfiles, null, 2)], {
+      type: "application/json",
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "vibe_selected_creators.json";
+    a.download = "vibe-selected-creators.json";
     document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
+    a.remove();
     URL.revokeObjectURL(url);
   }, [selectedProfiles]);
 
@@ -51,108 +50,132 @@ export function SelectedProfilesDrawer() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        aria-label={`Open selected profiles list. ${selectedProfiles.length} profiles selected.`}
-        className="relative flex items-center gap-3 px-6 py-3 coke-panel font-semibold uppercase tracking-wider transition-colors focus:outline-none focus:ring-2 focus:ring-coke-red/30"
+        aria-label={`Open shortlist, ${count} ${
+          count === 1 ? "creator" : "creators"
+        } selected`}
+        className="relative inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
       >
-        <span>List</span>
-        {selectedProfiles.length > 0 && (
-          <span className="inline-flex items-center justify-center w-6 h-6 text-sm font-black bg-white text-coke">
-            {selectedProfiles.length}
+        <ListChecks className="h-4 w-4" />
+        <span className="hidden sm:inline">Shortlist</span>
+        {count > 0 && (
+          <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-600 px-1.5 text-xs font-bold text-white">
+            {count}
           </span>
         )}
       </button>
 
-      {/* Render Drawer in Portal to escape backdrop-filter containing block */}
       {createPortal(
-          <>
-            {/* Backdrop */}
-            {isOpen && (
-              <div
-                className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] transition-opacity"
-                onClick={() => setIsOpen(false)}
-                aria-hidden="true"
-              />
+        <>
+          <div
+            className={cn(
+              "fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300",
+              isOpen ? "opacity-100" : "pointer-events-none opacity-0"
             )}
+            onClick={() => setIsOpen(false)}
+            aria-hidden="true"
+          />
 
-            {/* Drawer */}
-            <div
-              role="dialog"
-              aria-modal="true"
-              aria-label="Selected profiles"
-              className={cn(
-                "fixed inset-y-0 right-0 w-full max-w-md bg-slate-100 border-l border-slate-300 shadow-2xl z-[101] transform transition-transform duration-500 flex flex-col text-slate-800",
-                isOpen ? "translate-x-0" : "translate-x-full"
-              )}
-            >
-              <div className="flex items-center justify-between p-8 border-b border-slate-300">
-                <h2 className="text-2xl font-black uppercase tracking-tighter text-coke">
-                  Selection
-                </h2>
-                <button
-                  ref={closeButtonRef}
-                  onClick={() => setIsOpen(false)}
-                  aria-label="Close selection drawer"
-                  className="p-3 text-slate-500 hover:text-coke bg-slate-200 hover:bg-slate-300 transition-colors focus:outline-none focus:ring-2 focus:ring-coke-red/30"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Selected creators shortlist"
+            className={cn(
+              "fixed inset-y-0 right-0 z-[101] flex w-full max-w-md flex-col bg-white shadow-2xl transition-transform duration-300 ease-out",
+              isOpen ? "translate-x-0" : "translate-x-full"
+            )}
+          >
+            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+              <div>
+                <h2 className="text-lg font-bold text-slate-900">Shortlist</h2>
+                <p className="text-xs text-slate-500">
+                  {count} {count === 1 ? "creator" : "creators"} selected
+                </p>
               </div>
+              <button
+                ref={closeButtonRef}
+                onClick={() => setIsOpen(false)}
+                aria-label="Close shortlist"
+                className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
 
-              <div className="flex-1 overflow-y-auto p-6 space-y-4">
-                {selectedProfiles.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center h-full text-slate-400 gap-6">
-                    <Users className="w-16 h-16 opacity-20" />
-                    <p className="font-medium tracking-wide uppercase">
-                      No profiles added
-                    </p>
+            <div className="flex-1 overflow-y-auto p-4">
+              {count === 0 ? (
+                <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                    <Users className="h-7 w-7" />
                   </div>
-                ) : (
-                  selectedProfiles.map((profile) => (
-                    <div
+                  <p className="font-semibold text-slate-700">
+                    Your shortlist is empty
+                  </p>
+                  <p className="max-w-[16rem] text-sm text-slate-500">
+                    Add creators from the search results to build your list.
+                  </p>
+                </div>
+              ) : (
+                <ul className="space-y-2.5">
+                  {selectedProfiles.map((profile) => (
+                    <li
                       key={`${profile.platform}-${profile.username}`}
-                      className="flex items-center gap-4 p-4 liquid-silver group border border-slate-300"
+                      className="flex items-center gap-3 rounded-xl border border-slate-200 p-3"
                     >
                       <img
                         src={profile.picture}
-                        alt={`${profile.username}'s profile`}
-                        className="w-14 h-14 object-cover border border-slate-300 droplet-shape grayscale group-hover:grayscale-0 transition-all duration-500 relative z-10"
+                        alt={`${profile.username}'s avatar`}
+                        loading="lazy"
+                        className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-slate-100"
                       />
-                      <div className="flex-1 min-w-0 relative z-10">
-                        <p className="text-base font-bold text-slate-800 truncate tracking-tight">
-                          @{profile.username}
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-slate-900">
+                          {profile.fullname}
                         </p>
-                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mt-1">
-                          {profile.platform}
-                        </p>
+                        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                          <span
+                            className={cn(
+                              "h-2 w-2 rounded-full",
+                              PLATFORM_META[profile.platform].dotClass
+                            )}
+                          />
+                          <span className="truncate">
+                            @{profile.username} · {formatCompact(profile.followers)}
+                          </span>
+                        </div>
                       </div>
                       <button
                         onClick={() => removeProfile(profile.username)}
-                        aria-label={`Remove ${profile.username} from list`}
-                        className="p-3 text-slate-500 hover:text-coke hover:bg-slate-200 transition-colors focus:outline-none focus:ring-2 focus:ring-coke-red/30 relative z-10"
+                        aria-label={`Remove ${profile.username} from shortlist`}
+                        className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="h-4 w-4" />
                       </button>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {selectedProfiles.length > 0 && (
-                <div className="p-6 border-t border-slate-300 bg-slate-100">
-                  <button
-                    onClick={handleProceed}
-                    aria-label={`Export ${selectedProfiles.length} selected profiles as JSON`}
-                    className="w-full py-4 coke-panel font-black uppercase tracking-widest transition-colors flex items-center justify-center gap-3 focus:outline-none focus:ring-2 focus:ring-coke-red/30"
-                  >
-                    <Download className="w-5 h-5" />
-                    Export ({selectedProfiles.length})
-                  </button>
-                </div>
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
-          </>,
-          document.body
-        )}
+
+            {count > 0 && (
+              <div className="space-y-2 border-t border-slate-200 p-4">
+                <button
+                  onClick={handleExport}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-brand-600/30 transition-colors hover:bg-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+                >
+                  <Download className="h-4 w-4" /> Export as JSON
+                </button>
+                <button
+                  onClick={clear}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-slate-500 transition-colors hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
+          </div>
+        </>,
+        document.body
+      )}
     </>
   );
 }
