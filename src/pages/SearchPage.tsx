@@ -5,8 +5,6 @@ import { PlatformFilter } from "@/components/PlatformFilter";
 import { ProfileList } from "@/components/ProfileList";
 import { extractProfiles, filterProfiles } from "@/utils/dataHelpers";
 import { ArrowUpDown } from "lucide-react";
-import { cn } from "@/utils/cn";
-
 type SortOption = "default" | "followers_desc" | "followers_asc" | "engagement_desc" | "engagement_asc";
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
@@ -86,24 +84,22 @@ export function SearchPage() {
           Showing <span className="text-coke">{sorted.length}</span> results on <span className="text-coke">{platform}</span>
         </p>
 
-        <div className="flex items-center gap-2">
-          <ArrowUpDown className="w-4 h-4 text-slate-500" />
-          <div className="flex flex-wrap gap-2">
+        <div className="relative group flex items-center">
+          <ArrowUpDown className="w-4 h-4 text-slate-500 absolute left-4 pointer-events-none z-10 group-hover:text-coke transition-colors" />
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as SortOption)}
+            aria-label="Sort profiles"
+            className="appearance-none liquid-silver text-slate-800 text-xs font-black uppercase tracking-widest pl-10 pr-10 py-3 focus:outline-none focus:border-coke transition-all focus:ring-2 focus:ring-coke-red/30 cursor-pointer border-slate-300 hover:border-coke"
+          >
             {SORT_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                onClick={() => setSortBy(opt.value)}
-                aria-label={`Sort by ${opt.label}`}
-                className={cn(
-                  "px-3 py-1.5 text-xs font-bold uppercase tracking-widest border transition-all focus:outline-none focus:ring-2 focus:ring-coke-red/30",
-                  sortBy === opt.value
-                    ? "coke-panel border-coke"
-                    : "bg-transparent text-slate-600 border-slate-300 hover:border-coke hover:text-coke"
-                )}
-              >
+              <option key={opt.value} value={opt.value} className="bg-slate-100 text-slate-800 font-bold">
                 {opt.label}
-              </button>
+              </option>
             ))}
+          </select>
+          <div className="absolute right-4 pointer-events-none text-slate-500 group-hover:text-coke transition-colors text-xs font-bold z-10">
+            ▼
           </div>
         </div>
       </div>
