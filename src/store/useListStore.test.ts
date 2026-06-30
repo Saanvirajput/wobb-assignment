@@ -26,18 +26,15 @@ const mockProfile2: UserProfileSummary = {
 
 describe("useListStore", () => {
   beforeEach(() => {
-    // Reset the store before each test
     useListStore.setState({ selectedProfiles: [] });
   });
 
-  it("should start with an empty list", () => {
-    const { selectedProfiles } = useListStore.getState();
-    expect(selectedProfiles).toEqual([]);
+  it("starts with an empty list", () => {
+    expect(useListStore.getState().selectedProfiles).toEqual([]);
   });
 
-  it("should add a profile to the list", () => {
-    const { addProfile } = useListStore.getState();
-    addProfile(mockProfile, "instagram");
+  it("adds a profile to the list", () => {
+    useListStore.getState().addProfile(mockProfile, "instagram");
 
     const { selectedProfiles } = useListStore.getState();
     expect(selectedProfiles).toHaveLength(1);
@@ -45,62 +42,71 @@ describe("useListStore", () => {
     expect(selectedProfiles[0].platform).toBe("instagram");
   });
 
-  it("should prevent duplicate entries by username", () => {
+  it("persists only the whitelisted summary fields", () => {
+    useListStore.getState().addProfile(mockProfile, "instagram");
+    expect(useListStore.getState().selectedProfiles[0]).toEqual({
+      user_id: "123",
+      username: "testuser",
+      fullname: "Test User",
+      picture: "https://example.com/pic.jpg",
+      is_verified: true,
+      followers: 10000,
+      engagement_rate: 0.05,
+      platform: "instagram",
+    });
+  });
+
+  it("prevents duplicate entries by username", () => {
     const { addProfile } = useListStore.getState();
     addProfile(mockProfile, "instagram");
     addProfile(mockProfile, "instagram");
-    addProfile(mockProfile, "youtube"); // Same username, different platform — should still be blocked
+    addProfile(mockProfile, "youtube"); // same username, different platform — still blocked
 
-    const { selectedProfiles } = useListStore.getState();
-    expect(selectedProfiles).toHaveLength(1);
+    expect(useListStore.getState().selectedProfiles).toHaveLength(1);
   });
 
-  it("should remove a profile by username", () => {
+  it("removes a profile by username", () => {
     const { addProfile } = useListStore.getState();
     addProfile(mockProfile, "instagram");
     addProfile(mockProfile2, "youtube");
-
     expect(useListStore.getState().selectedProfiles).toHaveLength(2);
 
-    const { removeProfile } = useListStore.getState();
-    removeProfile("testuser");
+    useListStore.getState().removeProfile("testuser");
 
     const { selectedProfiles } = useListStore.getState();
     expect(selectedProfiles).toHaveLength(1);
     expect(selectedProfiles[0].username).toBe("anotheruser");
   });
 
-  it("should correctly report if a profile is added", () => {
-    const { addProfile, isProfileAdded } = useListStore.getState();
+  it("toggles a profile on and off", () => {
+    const { toggleProfile } = useListStore.getState();
 
-    expect(isProfileAdded("testuser")).toBe(false);
+    toggleProfile(mockProfile, "instagram");
+    expect(useListStore.getState().isSelected("testuser")).toBe(true);
 
-    addProfile(mockProfile, "instagram");
-
-    // Need to get fresh state after mutation
-    expect(useListStore.getState().isProfileAdded("testuser")).toBe(true);
-    expect(useListStore.getState().isProfileAdded("nonexistent")).toBe(false);
+    useListStore.getState().toggleProfile(mockProfile, "instagram");
+    expect(useListStore.getState().isSelected("testuser")).toBe(false);
   });
 
-  it("should handle removing a non-existent profile gracefully", () => {
-    const { addProfile } = useListStore.getState();
-    addProfile(mockProfile, "instagram");
-
-    const { removeProfile } = useListStore.getState();
-    removeProfile("nonexistent");
-
-    const { selectedProfiles } = useListStore.getState();
-    expect(selectedProfiles).toHaveLength(1);
+  it("reports whether a profile is selected", () => {
+    expect(useListStore.getState().isSelected("testuser")).toBe(false);
+    useListStore.getState().addProfile(mockProfile, "instagram");
+    expect(useListStore.getState().isSelected("testuser")).toBe(true);
+    expect(useListStore.getState().isSelected("nonexistent")).toBe(false);
   });
 
-  it("should add multiple different profiles", () => {
+  it("removes a non-existent profile gracefully", () => {
+    useListStore.getState().addProfile(mockProfile, "instagram");
+    useListStore.getState().removeProfile("nonexistent");
+    expect(useListStore.getState().selectedProfiles).toHaveLength(1);
+  });
+
+  it("clears the entire list", () => {
     const { addProfile } = useListStore.getState();
     addProfile(mockProfile, "instagram");
     addProfile(mockProfile2, "youtube");
 
-    const { selectedProfiles } = useListStore.getState();
-    expect(selectedProfiles).toHaveLength(2);
-    expect(selectedProfiles[0].platform).toBe("instagram");
-    expect(selectedProfiles[1].platform).toBe("youtube");
+    useListStore.getState().clear();
+    expect(useListStore.getState().selectedProfiles).toEqual([]);
   });
 });

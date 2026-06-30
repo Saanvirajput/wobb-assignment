@@ -9,6 +9,35 @@ const platformData: Record<Platform, SearchData> = {
   tiktok: tiktokData as SearchData,
 };
 
+export const PLATFORMS: Platform[] = ["instagram", "youtube", "tiktok"];
+
+/** Presentational metadata for each platform — keeps brand styling in one place. */
+export const PLATFORM_META: Record<
+  Platform,
+  { label: string; badgeClass: string; dotClass: string }
+> = {
+  instagram: {
+    label: "Instagram",
+    badgeClass:
+      "bg-gradient-to-tr from-amber-400 via-pink-600 to-purple-600 text-white",
+    dotClass: "bg-pink-500",
+  },
+  youtube: {
+    label: "YouTube",
+    badgeClass: "bg-red-600 text-white",
+    dotClass: "bg-red-500",
+  },
+  tiktok: {
+    label: "TikTok",
+    badgeClass: "bg-slate-900 text-white",
+    dotClass: "bg-cyan-400",
+  },
+};
+
+export function getPlatformLabel(platform: Platform): string {
+  return PLATFORM_META[platform]?.label ?? platform;
+}
+
 export function getSearchData(platform: Platform): SearchData {
   return platformData[platform];
 }
@@ -22,18 +51,11 @@ export function filterProfiles(
   profiles: UserProfileSummary[],
   query: string
 ): UserProfileSummary[] {
-  if (!query) return profiles;
-  return profiles.filter((p) => {
-    const matchUsername = p.username.toLowerCase().includes(query.toLowerCase());
-    const matchFullname = p.fullname.toLowerCase().includes(query.toLowerCase());
-    return matchUsername || matchFullname;
-  });
-}
-
-export const PLATFORMS: Platform[] = ["instagram", "youtube", "tiktok"];
-
-export function getPlatformLabel(platform: Platform): string {
-  if (platform === "instagram") return "Instagram";
-  if (platform === "youtube") return "YouTube";
-  return "TikTok";
+  const q = query.trim().toLowerCase();
+  if (!q) return profiles;
+  return profiles.filter(
+    (p) =>
+      p.username.toLowerCase().includes(q) ||
+      p.fullname.toLowerCase().includes(q)
+  );
 }
