@@ -1,14 +1,33 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { SearchPage } from "@/pages/SearchPage";
-import { ProfileDetailPage } from "@/pages/ProfileDetailPage";
+
+// Lazy-load route-level components for code splitting
+const SearchPage = lazy(() =>
+  import("@/pages/SearchPage").then((m) => ({ default: m.SearchPage }))
+);
+const ProfileDetailPage = lazy(() =>
+  import("@/pages/ProfileDetailPage").then((m) => ({
+    default: m.ProfileDetailPage,
+  }))
+);
+
+function PageLoader() {
+  return (
+    <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="animate-spin rounded-none h-16 w-16 border-4 border-zinc-800 border-t-white" />
+    </div>
+  );
+}
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<SearchPage />} />
-        <Route path="/profile/:username" element={<ProfileDetailPage />} />
-      </Routes>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<SearchPage />} />
+          <Route path="/profile/:username" element={<ProfileDetailPage />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }
