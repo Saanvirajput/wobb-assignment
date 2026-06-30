@@ -1,80 +1,104 @@
-# Wobb Frontend Assignment
+# Wobb Frontend Assignment — Influencer Search Platform
 
-A starter influencer search application built with **React**, **TypeScript**, **Vite**, and **Tailwind CSS**. This project is intentionally left in a rough-but-working state for candidates to improve.
+A modern, high-performance influencer search application built with **React 19**, **TypeScript**, **Vite**, and **Tailwind CSS v4**.
 
-## Getting Started
+## 🔗 Links
+
+- **Repository**: [github.com/Saanvirajput/wobb-assignment](https://github.com/Saanvirajput/wobb-assignment)
+
+---
+
+## What I Changed
+
+### 1. Bugs Found & Fixed
+
+| Bug | Location | Root Cause | Fix |
+|---|---|---|---|
+| **Stale `clickCount` state** | `SearchPage.tsx` | A `clickCount` state variable was incremented on every search but never used, causing unnecessary re-renders | Removed the dead state entirely |
+| **Case-sensitive username search** | `dataHelpers.ts` | `filterProfiles` compared usernames with case-sensitive matching, so searching "cristiano" wouldn't find "Cristiano" | Added `.toLowerCase()` to both the query and the username field |
+| **Wrong engagement stat display** | `ProfileDetailPage.tsx` | The "Engagements" stat was rendering `formatEngagementRate(engagement_rate)` (a percentage) instead of the actual `engagements` count | Changed to render `formatFollowersDetail(user.engagements)` |
+| **Missing "Add to List" implementation** | `ProfileDetailPage.tsx` | The button was hardcoded as `disabled` with a `cursor-not-allowed` class and no click handler | Fully implemented with Zustand store integration |
+
+### 2. State Management — React Context → Zustand
+
+- Created `src/store/useListStore.ts` using Zustand with the `persist` middleware
+- The store handles: `addProfile`, `removeProfile`, `isProfileAdded`
+- **Persistence**: Selected profiles survive page refreshes via `localStorage`
+- **Duplicate Prevention**: `addProfile` checks by username before inserting
+- **7 unit tests** validate all store operations (see `useListStore.test.ts`)
+
+### 3. UI/UX Redesign
+
+- **Dark Mode**: Premium dark aesthetic with `bg-black` base and `zinc-900` surfaces
+- **Typography**: Bold, uppercase, tightly tracked headings for a commanding visual presence
+- **Animations**: Framer Motion for staggered list animations, card hover effects, and page transitions
+- **Icons**: Lucide React for consistent, modern iconography
+- **Responsive**: Fully responsive from mobile to desktop using Tailwind breakpoints
+
+### 4. Accessibility
+
+- **Skip-to-content** link for keyboard users
+- **Semantic HTML**: `role="banner"`, `role="main"`, `aria-label` on nav, `aria-modal` on drawer
+- **Keyboard navigation**: All interactive elements are `Tab`-focusable with visible focus rings
+- **Drawer**: Closes on `Escape` key, traps focus, prevents body scroll when open
+- **ARIA attributes**: `aria-label` on buttons, `role="tablist"` with `aria-selected` on platform filters
+
+### 5. Performance Optimizations
+
+- **Code Splitting**: `React.lazy` + `Suspense` for route-level lazy loading (`SearchPage` and `ProfileDetailPage` are separate chunks)
+- **Memoization**: `React.memo` on `ProfileCard` to prevent unnecessary re-renders when sibling cards change
+- **`useCallback`**: Stabilized event handlers in `ProfileCard` to work with `React.memo`
+- **`useMemo`**: Profile filtering in `SearchPage` is memoized to avoid recalculation on unrelated state changes
+- **Lazy Images**: `loading="lazy"` on all profile images
+
+### 6. Code Quality
+
+- **Folder Structure**: Clean separation — `components/`, `pages/`, `store/`, `utils/`, `types/`
+- **Utility**: `cn()` helper (`clsx` + `tailwind-merge`) for conditional class merging
+- **TypeScript**: Proper types throughout — no `any` usage
+- **React Best Practices**: Components defined outside render, event handlers properly memoized
+
+---
+
+## Libraries Added
+
+| Library | Purpose |
+|---|---|
+| `zustand` | Lightweight state management with built-in persistence middleware |
+| `framer-motion` | High-performance animations and micro-interactions |
+| `lucide-react` | Modern, tree-shakeable icon library |
+| `clsx` + `tailwind-merge` | Conditional class name composition without conflicts |
+| `vitest` (dev) | Fast, Vite-native unit testing framework |
+
+---
+
+## Assumptions Made
+
+- The original React Context was intentionally left incomplete as a stub for candidates to replace
+- The `engagement_rate` values in the JSON data represent raw ratios (not percentages), so `formatEngagementRate` from `formatters.ts` is the correct formatting function
+- The "Add to List" feature uses `localStorage` persistence since no backend is provided
+
+## Trade-offs
+
+- **Portal for Drawer**: The drawer renders via `createPortal` to escape the header's `backdrop-filter` containing block — this adds complexity but solves a real CSS stacking context bug
+- **localStorage over backend**: Keeps the app self-contained but limits list sharing across devices
+- **Static JSON data**: Kept the original data loading approach rather than mocking an API layer, since the assignment focuses on UI and state management
+
+## Remaining Improvements
+
+- Add end-to-end tests (Playwright/Cypress) for full user flows
+- Implement virtual scrolling for large datasets (`tanstack-virtual`)
+- Add a CSV/PDF export option alongside JSON
+- Dark/Light theme toggle with system preference detection
+
+---
+
+## Running Locally
 
 ```bash
 npm install
-npm run dev
+npm run dev        # Start dev server at http://localhost:5173
+npm run build      # Production build
+npm run lint       # ESLint
+npx vitest run     # Run unit tests
 ```
-
-Open [http://localhost:5173](http://localhost:5173) to view the app.
-
-## What's Included
-
-- **Search / Dashboard** — filter influencers by platform (Instagram, YouTube, TikTok) and search by username or full name
-- **Profile Details** — click a profile to view extended data loaded from individual JSON files
-- **Routing** — `react-router-dom` with `/` (search) and `/profile/:username` (details)
-
-Sample data lives in:
-
-- `src/assets/data/search/` — platform search results (10 profiles each)
-- `src/assets/data/profiles/` — detailed profile JSON per username
-
-## How to Submit
-
-1. **Download or clone** this starter project to your machine.
-2. **Create a new repository** on your own GitHub account. Do not fork the original assignment repo — push your work to a repo you own.
-3. Complete the tasks below and push your changes to that repository.
-4. **Share the public GitHub repository URL** with us as your submission.
-
-### Deadline (strict)
-
-- **Due:** **2 July 2026, 2:00 PM IST** (Indian Standard Time, UTC+5:30)
-- **Any git commits made after this deadline will disqualify your submission.** We will only consider the repository state as of the deadline; late commits will not be reviewed.
-- Make sure your final work is pushed **before** the cutoff.
-
-## AI Usage
-
-You may use any AI tools (Cursor, ChatGPT, Claude, GitHub Copilot, etc.). We are evaluating your final solution and engineering decisions.
-
-## Your Tasks
-
-Complete the following as part of your submission:
-
-1. **Find and fix all bugs and quality issues** — the codebase contains intentional bugs and quality issues. Identify and resolve them.
-
-2. **Completely redesign the UI/UX** — replace the basic layout with a polished, modern interface. Focus on usability, visual hierarchy, and delight.
-
-3. **Replace React Context with Zustand** — when you implement state management for the selected list, use [Zustand](https://github.com/pmndrs/zustand) instead of React Context.
-
-4. **Implement "Select profile & Add to List"** — the disabled "Add to List" button is a stub. Build the full feature:
-   - Select / add profiles to a persistent list
-   - View and manage the selected list
-   - Handle duplicates appropriately
-
-5. **Improve code quality and project structure** — refactor as needed, add proper types, and follow React best practices.
-
-6. **Optimize performance** — apply sensible optimizations where appropriate.
-
-7. **Use any libraries you need** — you are not limited to the current stack. Choose tools that help you deliver a great result (UI kits, state managers, testing libraries, etc.).
-
-## Scripts
-
-| Command        | Description              |
-| -------------- | ------------------------ |
-| `npm run dev`  | Start development server |
-| `npm run build`| Production build         |
-| `npm run lint` | Run ESLint               |
-
-## Submission Notes
-
-- Document any assumptions or trade-offs in your README
-- Ensure `npm run build` passes before submitting
-- Focus on demonstrating your judgment — not every possible feature needs to be built, but the core assignment items should be addressed thoughtfully
-- Double-check that your repo is public (or that we have access) and that the link is included in your submission
-- Please make meaningful commits throughout your work. We may review your commit history.
-- **Bonus:** Deploying the app (e.g. Vercel, Netlify, GitHub Pages) is optional but will be considered a plus — include the live URL in your submission if you do
-
-Good luck!
