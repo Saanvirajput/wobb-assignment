@@ -61,24 +61,24 @@ export const ProfileCard = memo(function ProfileCard({
           handleClick();
         }
       }}
-      className="flex flex-col sm:flex-row items-center gap-6 p-6 mb-4 w-full max-w-3xl bg-zinc-900/50 border border-zinc-800 hover:border-zinc-600 cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-white/30"
+      className="flex flex-col sm:flex-row items-center gap-6 p-6 mb-4 w-full max-w-3xl liquid-silver group cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-coke-red/30"
       data-search={searchQuery}
     >
       <img
         src={profile.picture}
         alt={`Profile of ${profile.username}`}
         loading="lazy"
-        className="w-20 h-20 object-cover border border-zinc-800 grayscale hover:grayscale-0 transition-all duration-500"
+        className="w-20 h-20 object-cover border border-slate-300 droplet-shape grayscale group-hover:grayscale-0 transition-all duration-500 relative z-10"
       />
-      <div className="text-center sm:text-left flex-1 min-w-0">
-        <div className="font-black text-white flex items-center justify-center sm:justify-start gap-2 text-2xl md:text-3xl tracking-tighter uppercase truncate">
+      <div className="text-center sm:text-left flex-1 min-w-0 relative z-10">
+        <div className="font-black text-slate-900 flex items-center justify-center sm:justify-start gap-2 text-2xl md:text-3xl tracking-tighter uppercase truncate">
           @{profile.username}
           <VerifiedBadge verified={profile.is_verified} />
         </div>
-        <div className="text-base text-zinc-400 font-medium truncate mt-1">
+        <div className="text-base text-slate-600 font-medium truncate mt-1">
           {profile.fullname}
         </div>
-        <div className="text-sm text-zinc-600 mt-2 font-bold tracking-widest uppercase">
+        <div className="text-sm text-slate-500 mt-2 font-bold tracking-widest uppercase">
           {formatFollowersLocal(profile.followers)}
         </div>
       </div>
@@ -91,10 +91,10 @@ export const ProfileCard = memo(function ProfileCard({
             : `Add ${profile.username} to list`
         }
         className={cn(
-          "w-full sm:w-auto flex justify-center items-center gap-2 px-8 py-4 text-sm font-black uppercase tracking-widest transition-all duration-300 border mt-4 sm:mt-0 focus:outline-none focus:ring-2 focus:ring-white/30",
+          "w-full sm:w-auto flex justify-center items-center gap-2 px-8 py-4 text-sm font-black uppercase tracking-widest transition-all duration-300 border mt-4 sm:mt-0 focus:outline-none focus:ring-2 focus:ring-coke-red/30 relative z-10",
           isAdded
-            ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.15)]"
-            : "bg-black text-white border-zinc-700 hover:border-white hover:bg-zinc-900"
+            ? "coke-panel border-coke"
+            : "bg-transparent text-slate-700 border-slate-400 hover:border-coke hover:text-coke"
         )}
       >
         {isAdded ? (
