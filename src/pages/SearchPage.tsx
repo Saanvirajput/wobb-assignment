@@ -4,6 +4,7 @@ import type { Platform, UserProfileSummary } from "@/types";
 import { Layout } from "@/components/Layout";
 import { PlatformFilter } from "@/components/PlatformFilter";
 import { ProfileList } from "@/components/ProfileList";
+import { HeroBackground } from "@/components/HeroBackground";
 import { extractProfiles, filterProfiles } from "@/utils/dataHelpers";
 
 type SortOption =
@@ -73,26 +74,14 @@ export function SearchPage() {
     <Layout>
       {/* Hero */}
       <section className="relative mx-auto mb-10 max-w-3xl overflow-hidden px-4 pb-2 pt-6 text-center sm:px-0">
-        {/* Decorative background — contained to the hero, purely cosmetic */}
-        <div
-          aria-hidden="true"
-          className="dot-grid pointer-events-none absolute inset-0 -z-10"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-72 w-72 -translate-x-[60%] rounded-full bg-brand-400/25 blur-3xl"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-16 left-1/2 -z-10 h-72 w-72 translate-x-[10%] rounded-full bg-violet-400/20 blur-3xl"
-        />
+        <HeroBackground />
 
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+        <span className="badge-glow inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
           ✨ Creator discovery, reimagined
         </span>
         <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
           Find the right{" "}
-          <span className="bg-gradient-to-r from-brand-600 to-violet-500 bg-clip-text text-transparent">
+          <span className="glow-text bg-gradient-to-r from-brand-600 to-violet-500 bg-clip-text text-transparent">
             creators
           </span>{" "}
           for your brand

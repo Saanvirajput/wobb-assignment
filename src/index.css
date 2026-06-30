@@ -88,6 +88,42 @@
     -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 35%, #000 40%, transparent 80%);
     mask-image: radial-gradient(ellipse 60% 60% at 50% 35%, #000 40%, transparent 80%);
   }
+
+  /* Soft glow behind the gradient headline text. drop-shadow (not
+     text-shadow) so it follows the glyph alpha even with a transparent,
+     background-clip: text fill. */
+  .glow-text {
+    filter: drop-shadow(0 0 14px rgba(99, 102, 241, 0.35))
+      drop-shadow(0 0 30px rgba(168, 85, 247, 0.2));
+    animation: glow-pulse 4s ease-in-out infinite;
+  }
+
+  /* Gentle breathing ring around the hero eyebrow badge. */
+  .badge-glow {
+    animation: badge-pulse 3s ease-in-out infinite;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.3))
+      drop-shadow(0 0 24px rgba(168, 85, 247, 0.16));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.5))
+      drop-shadow(0 0 40px rgba(168, 85, 247, 0.28));
+  }
+}
+
+@keyframes badge-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.18);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(79, 70, 229, 0);
+  }
 }
 
 /* ------------------------------------------------------------------ */
