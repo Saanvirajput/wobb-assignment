@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import type { Platform } from "@/types";
 import { Layout } from "@/components/Layout";
 import { PlatformFilter } from "@/components/PlatformFilter";
@@ -8,21 +8,25 @@ import { extractProfiles, filterProfiles } from "@/utils/dataHelpers";
 export function SearchPage() {
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [searchQuery, setSearchQuery] = useState("");
-  const [clickCount, setClickCount] = useState(0);
 
-  const allProfiles = extractProfiles(platform);
-  const filtered = filterProfiles(allProfiles, searchQuery);
-
-  const handleProfileClick = (username: string) => {
-    setClickCount(clickCount + 1);
-    console.log("Clicked profile:", username, "total clicks:", clickCount);
-  };
+  const allProfiles = useMemo(() => extractProfiles(platform), [platform]);
+  
+  const filtered = useMemo(
+    () => filterProfiles(allProfiles, searchQuery),
+    [allProfiles, searchQuery]
+  );
 
   return (
-    <Layout title="Find Influencers">
-      <p className="text-gray-500 mb-4 text-sm">
-        Browse top creators across social platforms
-      </p>
+    <Layout>
+      <div className="text-center mb-16 mt-12 md:mt-24">
+        <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter uppercase mb-6 leading-none">
+          Find Creators.<br />
+          <span className="text-zinc-600">Elevate Brands.</span>
+        </h2>
+        <p className="text-lg md:text-xl text-zinc-400 max-w-3xl mx-auto font-medium tracking-wide">
+          Analyze and select the most influential voices across major social platforms.
+        </p>
+      </div>
 
       <PlatformFilter
         selected={platform}
@@ -34,15 +38,16 @@ export function SearchPage() {
         onSearchChange={setSearchQuery}
       />
 
-      <p className="text-xs text-gray-400 mb-2">
-        Showing {filtered.length} of {allProfiles.length} on {platform}
-      </p>
+      <div className="max-w-3xl mx-auto flex items-center justify-between mb-8 px-4 border-b border-zinc-900 pb-4">
+        <p className="text-sm font-bold text-zinc-500 uppercase tracking-widest">
+          Showing <span className="text-white">{filtered.length}</span> results on <span className="text-white">{platform}</span>
+        </p>
+      </div>
 
       <ProfileList
         profiles={filtered}
         platform={platform}
         searchQuery={searchQuery}
-        onProfileClick={handleProfileClick}
       />
     </Layout>
   );
