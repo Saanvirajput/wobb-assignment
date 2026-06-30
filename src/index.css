@@ -1,19 +1,132 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", "Helvetica Neue", sans-serif;
+  --color-silver-light: #f8fafc;
+  --color-silver-mid: #cbd5e1;
+  --color-silver-dark: #94a3b8;
+  --color-coke-red: #73222a;
+  --color-coke-red-dark: #5a1820;
+  
+  --font-sans: "Inter", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Playfair Display", "Merriweather", serif;
 }
 
 @layer base {
-  html {
-    font-family: var(--font-sans);
-    scroll-behavior: smooth;
-    background-color: #000000;
+  :root {
+    --metallic-silver: linear-gradient(135deg, var(--color-silver-mid) 0%, var(--color-silver-light) 35%, var(--color-silver-dark) 70%, var(--color-silver-mid) 100%);
   }
-  
+
   body {
-    @apply bg-black text-white antialiased selection:bg-white selection:text-black;
+    background-image: var(--metallic-silver);
+    background-attachment: fixed;
+    color: #1a1a1a;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    position: relative;
   }
+
+  /* SVG Noise Overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0.4;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+}
+
+@layer utilities {
+  .liquid-silver {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 
+      0 4px 24px -1px rgba(0, 0, 0, 0.1),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Chrome shine hover effect */
+  .liquid-silver::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-25deg);
+    transition: none;
+  }
+
+  .liquid-silver:hover::after,
+  .group:hover .liquid-silver::after {
+    animation: chromeShine 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Solid Coke Red accent element */
+  .coke-panel {
+    background-color: var(--color-coke-red);
+    color: white;
+    box-shadow: 
+      0 8px 32px -4px rgba(115, 34, 42, 0.4),
+      inset 0 2px 4px rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--color-coke-red-dark);
+  }
+  
+  .text-coke {
+    color: var(--color-coke-red);
+  }
+  
+  .border-coke {
+    border-color: var(--color-coke-red);
+  }
+
+  /* Fluid shapes for profiles */
+  .droplet-shape {
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    transition: border-radius 0.4s ease-in-out;
+  }
+  
+  .droplet-shape:hover {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+}
+
+@keyframes chromeShine {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 250%;
+  }
+}
+
+/* Custom Scrollbar for the metallic feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-silver-mid);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-coke-red);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-coke-red-dark);
 }

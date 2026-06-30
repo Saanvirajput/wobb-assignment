@@ -17,13 +17,13 @@ function formatFollowersDetail(count: number) {
 }
 
 const StatBox = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string | number }) => (
-  <div className="bg-zinc-900/30 border border-zinc-800 p-8 flex flex-col items-center text-center gap-4 hover:border-zinc-500 transition-all hover:bg-zinc-900">
-    <div className="text-zinc-600">
+  <div className="liquid-silver group border border-slate-300 p-8 flex flex-col items-center text-center gap-4 hover:border-coke transition-all">
+    <div className="text-slate-500 group-hover:text-coke transition-colors">
       <Icon className="w-8 h-8" />
     </div>
-    <div>
-      <div className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-2">{value}</div>
-      <div className="text-xs md:text-sm font-bold text-zinc-500 uppercase tracking-widest">{label}</div>
+    <div className="relative z-10">
+      <div className="text-3xl md:text-5xl font-black text-slate-800 tracking-tighter mb-2">{value}</div>
+      <div className="text-xs md:text-sm font-bold text-slate-600 uppercase tracking-widest">{label}</div>
     </div>
   </div>
 );
@@ -46,12 +46,22 @@ export function ProfileDetailPage() {
     });
   }, [username]);
 
+  // Dynamic page title
+  useEffect(() => {
+    if (profileData?.data?.user_profile) {
+      document.title = `@${profileData.data.user_profile.username} — Vibe`;
+    } else if (username) {
+      document.title = `@${username} — Vibe`;
+    }
+    return () => { document.title = "Vibe — Influencer Search Platform"; };
+  }, [profileData, username]);
+
   if (!username) {
     return (
       <Layout>
         <div className="text-center py-32">
-          <p className="text-3xl font-black text-white uppercase tracking-widest mb-8">Invalid profile</p>
-          <Link to="/" className="text-zinc-500 hover:text-white inline-flex items-center gap-3 font-bold uppercase tracking-widest transition-colors">
+          <p className="text-3xl font-black text-slate-800 uppercase tracking-widest mb-8">Invalid profile</p>
+          <Link to="/" className="text-slate-600 hover:text-coke inline-flex items-center gap-3 font-bold uppercase tracking-widest transition-colors">
             <ArrowLeft className="w-5 h-5" /> Return
           </Link>
         </div>
@@ -63,7 +73,7 @@ export function ProfileDetailPage() {
     return (
       <Layout>
         <div className="flex justify-center items-center py-40">
-          <div className="animate-spin rounded-none h-16 w-16 border-4 border-zinc-800 border-t-white"></div>
+          <div className="animate-spin rounded-none h-16 w-16 border-4 border-slate-300 border-t-coke-red"></div>
         </div>
       </Layout>
     );
@@ -73,8 +83,8 @@ export function ProfileDetailPage() {
     return (
       <Layout>
         <div className="text-center py-32">
-          <p className="text-3xl font-black text-red-500 uppercase tracking-widest mb-8">Profile Not Found</p>
-          <Link to="/" className="text-zinc-500 hover:text-white inline-flex items-center gap-3 font-bold uppercase tracking-widest transition-colors">
+          <p className="text-3xl font-black text-coke uppercase tracking-widest mb-8">Profile Not Found</p>
+          <Link to="/" className="text-slate-600 hover:text-coke inline-flex items-center gap-3 font-bold uppercase tracking-widest transition-colors">
             <ArrowLeft className="w-5 h-5" /> Return
           </Link>
         </div>
@@ -95,7 +105,7 @@ export function ProfileDetailPage() {
 
   return (
     <Layout title="">
-      <Link to="/" className="inline-flex items-center gap-3 text-sm font-black uppercase tracking-widest text-zinc-500 hover:text-white mb-12 transition-colors">
+      <Link to="/" className="inline-flex items-center gap-3 text-sm font-black uppercase tracking-widest text-slate-600 hover:text-coke mb-12 transition-colors">
         <ArrowLeft className="w-5 h-5" /> Go Back
       </Link>
 
@@ -109,22 +119,22 @@ export function ProfileDetailPage() {
           <img
             src={user.picture}
             alt={`Profile of ${user.username}`}
-            className="w-40 h-40 md:w-56 md:h-56 object-cover border border-zinc-800 grayscale mb-8 shadow-2xl"
+            className="w-40 h-40 md:w-56 md:h-56 object-cover border border-slate-300 droplet-shape grayscale mb-8 shadow-2xl"
           />
           
-          <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter uppercase flex items-center justify-center gap-4 mb-4">
+          <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 tracking-tighter uppercase flex items-center justify-center gap-4 mb-4">
             @{user.username}
             <VerifiedBadge verified={user.is_verified} />
           </h2>
           
-          <p className="text-2xl text-zinc-400 font-medium mb-6 tracking-wide">{user.fullname}</p>
+          <p className="text-2xl text-slate-700 font-medium mb-6 tracking-wide">{user.fullname}</p>
           
-          <span className="inline-block px-4 py-2 border border-zinc-700 text-zinc-300 text-sm font-black uppercase tracking-widest mb-10">
+          <span className="inline-block px-4 py-2 border border-slate-400 text-slate-600 text-sm font-black uppercase tracking-widest mb-10 bg-white/30 backdrop-blur-sm">
             {platform}
           </span>
 
           {user.description && (
-            <p className="text-zinc-500 max-w-3xl text-lg md:text-xl font-medium leading-relaxed mb-10">{user.description}</p>
+            <p className="text-slate-600 max-w-3xl text-lg md:text-xl font-medium leading-relaxed mb-10">{user.description}</p>
           )}
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-md">
@@ -133,8 +143,8 @@ export function ProfileDetailPage() {
               className={cn(
                 "w-full flex items-center justify-center gap-3 px-8 py-5 text-sm font-black uppercase tracking-widest transition-all duration-300 border",
                 isAdded
-                  ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.15)]"
-                  : "bg-black text-white border-zinc-700 hover:border-white hover:bg-zinc-900"
+                  ? "coke-panel border-coke"
+                  : "bg-transparent text-slate-700 border-slate-400 hover:border-coke hover:text-coke"
               )}
             >
               {isAdded ? (
@@ -153,7 +163,7 @@ export function ProfileDetailPage() {
                 href={user.url}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full flex items-center justify-center gap-3 px-8 py-5 text-sm font-black uppercase tracking-widest bg-zinc-900 text-white border border-zinc-800 hover:border-zinc-500 transition-all"
+                className="w-full flex items-center justify-center gap-3 px-8 py-5 text-sm font-black uppercase tracking-widest liquid-silver text-slate-700 border border-slate-400 hover:border-coke hover:text-coke transition-all"
               >
                 View Profile
               </a>
@@ -161,7 +171,7 @@ export function ProfileDetailPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-4 border-t border-zinc-900 pt-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-4 border-t border-slate-300 pt-16">
           <StatBox icon={Users} label="Followers" value={formatFollowersDetail(user.followers)} />
           <StatBox 
             icon={Activity} 

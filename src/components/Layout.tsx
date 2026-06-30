@@ -9,7 +9,7 @@ interface LayoutProps {
 
 export function Layout({ children, title }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-black flex flex-col font-sans text-white">
+    <div className="min-h-screen flex flex-col font-sans text-slate-900 relative">
       {/* Skip to content link — accessibility best practice */}
       <a
         href="#main-content"
@@ -19,7 +19,7 @@ export function Layout({ children, title }: LayoutProps) {
       </a>
 
       <header
-        className="sticky top-0 z-30 bg-black/60 backdrop-blur-2xl border-b border-zinc-900"
+        className="sticky top-0 z-30 liquid-silver border-b border-white/50"
         role="banner"
       >
         <nav
@@ -28,10 +28,10 @@ export function Layout({ children, title }: LayoutProps) {
         >
           <Link
             to="/"
-            className="text-2xl md:text-3xl font-black tracking-tighter uppercase flex items-center gap-3 hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-white/30"
+            className="text-2xl md:text-3xl font-black tracking-tighter uppercase flex items-center gap-3 text-coke hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-coke-red"
             aria-label="Vibe — Go to homepage"
           >
-            <div className="w-10 h-10 bg-white flex items-center justify-center text-black">
+            <div className="w-10 h-10 coke-panel flex items-center justify-center font-serif italic text-xl pr-0.5">
               V
             </div>
             VIBE
@@ -46,7 +46,7 @@ export function Layout({ children, title }: LayoutProps) {
         role="main"
       >
         {title && (
-          <h1 className="text-4xl md:text-6xl font-black mb-12 tracking-tighter uppercase">
+          <h1 className="text-4xl md:text-6xl font-black mb-12 tracking-tighter uppercase text-coke">
             {title}
           </h1>
         )}
