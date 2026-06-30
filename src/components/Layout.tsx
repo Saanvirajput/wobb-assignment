@@ -1,13 +1,30 @@
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { Sparkles } from "lucide-react";
+import { Logo } from "./Logo";
 import { SelectedProfilesDrawer } from "./SelectedProfilesDrawer";
+import { cn } from "@/utils/cn";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
+/** True once the page has scrolled past a small threshold. */
+function useScrolled(threshold = 8) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > threshold);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [threshold]);
+
+  return scrolled;
+}
+
 export function Layout({ children }: LayoutProps) {
+  const scrolled = useScrolled();
+
   return (
     <div className="min-h-screen flex flex-col font-sans text-slate-900">
       {/* Accessibility: jump straight to content with the keyboard */}
@@ -19,11 +36,19 @@ export function Layout({ children }: LayoutProps) {
       </a>
 
       <header
-        className="sticky top-0 z-30 glass border-b border-ink-900/[0.06]"
+        className={cn(
+          "sticky top-0 z-30 glass border-b transition-shadow duration-300 ease-out",
+          scrolled
+            ? "border-ink-900/[0.08] shadow-[0_1px_0_rgba(0,0,0,0.02),0_8px_24px_-12px_rgba(15,23,42,0.12)]"
+            : "border-ink-900/[0.06] shadow-none"
+        )}
         role="banner"
       >
         <nav
-          className="mx-auto flex h-[60px] max-w-6xl items-center justify-between px-4 sm:px-6"
+          className={cn(
+            "mx-auto flex max-w-6xl items-center justify-between px-4 transition-[height] duration-300 ease-out sm:px-6",
+            scrolled ? "h-[52px]" : "h-[60px]"
+          )}
           aria-label="Main navigation"
         >
           <Link
@@ -31,9 +56,7 @@ export function Layout({ children }: LayoutProps) {
             className="group flex items-center gap-2 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
             aria-label="Vibe — go to homepage"
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-ink-900 text-white transition-transform duration-300 ease-out group-hover:scale-105">
-              <Sparkles className="h-3.5 w-3.5" />
-            </span>
+            <Logo className="h-7 w-7 transition-transform duration-300 ease-out group-hover:scale-105" />
             <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink-900">
               Vibe
             </span>

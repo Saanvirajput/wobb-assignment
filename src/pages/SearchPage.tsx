@@ -5,7 +5,10 @@ import { Layout } from "@/components/Layout";
 import { PlatformFilter } from "@/components/PlatformFilter";
 import { ProfileList } from "@/components/ProfileList";
 import { HeroBackground } from "@/components/HeroBackground";
-import { extractProfiles, filterProfiles } from "@/utils/dataHelpers";
+import { CreatorMarquee } from "@/components/CreatorMarquee";
+import { AnimatedNumber } from "@/components/AnimatedNumber";
+import { PLATFORMS, extractProfiles, filterProfiles } from "@/utils/dataHelpers";
+import { formatCompact } from "@/utils/formatters";
 
 type SortOption =
   | "default"
@@ -54,6 +57,15 @@ export function SearchPage() {
     document.title = "Vibe — Influencer Search";
   }, []);
 
+  // Catalog-wide totals (independent of the selected tab) for the hero stats.
+  const catalogStats = useMemo(() => {
+    const all = PLATFORMS.flatMap((p) => extractProfiles(p));
+    return {
+      creatorCount: all.length,
+      totalReach: all.reduce((sum, p) => sum + p.followers, 0),
+    };
+  }, []);
+
   const allProfiles = useMemo(() => extractProfiles(platform), [platform]);
   const filtered = useMemo(
     () => filterProfiles(allProfiles, searchQuery),
@@ -90,6 +102,33 @@ export function SearchPage() {
           Search and shortlist top voices across Instagram, YouTube, and TikTok
           — all in one place.
         </p>
+
+        <CreatorMarquee />
+
+        <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-8 text-center">
+          <div>
+            <div className="text-2xl font-semibold tracking-[-0.02em] text-ink-900">
+              <AnimatedNumber
+                value={catalogStats.creatorCount}
+                format={(n) => n.toString()}
+              />
+              +
+            </div>
+            <div className="mt-0.5 text-xs font-medium text-ink-400">
+              Creators indexed
+            </div>
+          </div>
+          <div className="h-8 w-px bg-ink-900/10" aria-hidden="true" />
+          <div>
+            <div className="text-2xl font-semibold tracking-[-0.02em] text-ink-900">
+              <AnimatedNumber value={catalogStats.totalReach} format={formatCompact} />
+              +
+            </div>
+            <div className="mt-0.5 text-xs font-medium text-ink-400">
+              Combined reach
+            </div>
+          </div>
+        </div>
       </section>
 
       <PlatformFilter

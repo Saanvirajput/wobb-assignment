@@ -115,6 +115,26 @@
   .btn-pill:active {
     transform: scale(0.96);
   }
+
+  /* Continuously drifting creator avatar reel — pauses on hover/focus so
+     it never fights with interaction, and freezes for reduced motion via
+     the global media query below. */
+  .marquee-track {
+    animation: marquee 32s linear infinite;
+  }
+  .marquee-track:hover,
+  .marquee-track:focus-within {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes glow-pulse {
