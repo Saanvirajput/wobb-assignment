@@ -73,22 +73,22 @@ export function SearchPage() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative mx-auto mb-10 max-w-3xl overflow-hidden px-4 pb-2 pt-6 text-center sm:px-0">
+      <section className="relative mx-auto mb-14 max-w-3xl overflow-hidden px-4 pb-4 pt-10 text-center sm:px-0 sm:pt-16">
         <HeroBackground />
 
-        <span className="badge-glow inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
-          ✨ Creator discovery, reimagined
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-ink-900/[0.06] bg-white/70 px-3.5 py-1.5 text-[13px] font-medium text-ink-600 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+          <span aria-hidden="true">✨</span> Creator discovery, reimagined
         </span>
-        <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+        <h1 className="mx-auto mt-6 max-w-2xl text-[2.75rem] font-semibold leading-[1.05] tracking-[-0.03em] text-ink-900 sm:text-6xl lg:text-7xl">
           Find the right{" "}
           <span className="glow-text bg-gradient-to-r from-brand-600 to-violet-500 bg-clip-text text-transparent">
             creators
-          </span>{" "}
-          for your brand
+          </span>
+          <br className="hidden sm:block" /> for your brand
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-base text-slate-600 sm:text-lg">
-          Search and shortlist top voices across Instagram, YouTube, and TikTok —
-          all in one place.
+        <p className="mx-auto mt-6 max-w-md text-lg leading-relaxed text-ink-600 sm:text-xl">
+          Search and shortlist top voices across Instagram, YouTube, and TikTok
+          — all in one place.
         </p>
       </section>
 
@@ -100,19 +100,19 @@ export function SearchPage() {
       />
 
       {/* Results toolbar */}
-      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-slate-600" aria-live="polite">
-          <span className="font-semibold text-slate-900">{sorted.length}</span>{" "}
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-ink-600" aria-live="polite">
+          <span className="font-semibold text-ink-900">{sorted.length}</span>{" "}
           {sorted.length === 1 ? "creator" : "creators"}
         </p>
 
         <div className="relative">
-          <ArrowUpDown className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <ArrowUpDown className="pointer-events-none absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-ink-400" />
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
             aria-label="Sort creators"
-            className="cursor-pointer appearance-none rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-9 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:border-slate-300 focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-500/15"
+            className="cursor-pointer appearance-none rounded-full border border-ink-900/10 bg-white py-2 pl-9 pr-9 text-sm font-medium text-ink-600 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors duration-300 hover:border-ink-900/20 hover:text-ink-900 focus:border-brand-500/40 focus:outline-none focus:ring-4 focus:ring-brand-500/10"
           >
             {SORT_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -120,7 +120,7 @@ export function SearchPage() {
               </option>
             ))}
           </select>
-          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">
+          <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[10px] text-ink-400">
             ▼
           </span>
         </div>

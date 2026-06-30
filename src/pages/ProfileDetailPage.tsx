@@ -35,13 +35,13 @@ function StatCard({
 }) {
   return (
     <div className="card flex flex-col gap-2 p-5">
-      <div className="flex items-center gap-2 text-slate-400">
+      <div className="flex items-center gap-2 text-ink-400">
         <Icon className="h-4 w-4" />
         <span className="text-xs font-medium uppercase tracking-wide">
           {label}
         </span>
       </div>
-      <span className="text-2xl font-bold tracking-tight text-slate-900">
+      <span className="text-2xl font-semibold tracking-[-0.02em] text-ink-900">
         {value}
       </span>
     </div>
@@ -52,7 +52,7 @@ function BackLink() {
   return (
     <Link
       to="/"
-      className="inline-flex items-center gap-2 rounded-lg text-sm font-medium text-slate-600 transition-colors hover:text-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+      className="inline-flex items-center gap-2 rounded-full text-sm font-medium text-ink-600 transition-colors duration-300 hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
     >
       <ArrowLeft className="h-4 w-4" /> Back to search
     </Link>
@@ -128,7 +128,7 @@ export function ProfileDetailPage() {
           <BackLink />
         </div>
         <div className="flex justify-center py-32">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-brand-600" />
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-ink-900/10 border-t-brand-600" />
         </div>
       </Layout>
     );
@@ -141,8 +141,10 @@ export function ProfileDetailPage() {
           <BackLink />
         </div>
         <div className="card mx-auto max-w-md p-10 text-center">
-          <p className="text-xl font-bold text-slate-900">Profile not found</p>
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="text-xl font-semibold tracking-[-0.01em] text-ink-900">
+            Profile not found
+          </p>
+          <p className="mt-2 text-sm text-ink-600">
             We couldn't find details for{" "}
             <span className="font-medium">@{username}</span>.
           </p>
@@ -160,9 +162,9 @@ export function ProfileDetailPage() {
       </div>
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="mx-auto max-w-4xl"
       >
         {/* Header card */}
@@ -171,7 +173,7 @@ export function ProfileDetailPage() {
           <div className="px-6 pb-6 sm:px-8 sm:pb-8">
             <div className="-mt-12 flex flex-col items-center text-center sm:flex-row sm:items-end sm:text-left">
               {avatarFailed ? (
-                <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-slate-100 text-3xl font-bold text-slate-400 ring-4 ring-white">
+                <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-slate-100 text-3xl font-semibold text-ink-400 ring-4 ring-white">
                   {(user.username || user.fullname || "?").charAt(0).toUpperCase()}
                 </div>
               ) : (
@@ -186,13 +188,13 @@ export function ProfileDetailPage() {
               )}
               <div className="mt-4 sm:ml-5 sm:mt-0 sm:pb-1">
                 <div className="flex items-center justify-center gap-1.5 sm:justify-start">
-                  <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">
+                  <h1 className="text-2xl font-semibold tracking-[-0.02em] text-ink-900">
                     {user.fullname}
                   </h1>
                   <VerifiedBadge verified={user.is_verified} className="h-5 w-5" />
                 </div>
                 <div className="mt-1 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-                  <span className="text-sm text-slate-500">@{user.username}</span>
+                  <span className="text-sm text-ink-400">@{user.username}</span>
                   <span
                     className={cn(
                       "rounded-full px-2.5 py-0.5 text-[11px] font-semibold",
@@ -206,7 +208,7 @@ export function ProfileDetailPage() {
             </div>
 
             {user.description && (
-              <p className="mx-auto mt-5 max-w-2xl text-center text-sm leading-relaxed text-slate-600 sm:text-left">
+              <p className="mx-auto mt-5 max-w-2xl text-center text-sm leading-relaxed text-ink-600 sm:text-left">
                 {user.description}
               </p>
             )}
@@ -216,10 +218,10 @@ export function ProfileDetailPage() {
                 onClick={() => toggleProfile(user, platform)}
                 aria-pressed={isAdded}
                 className={cn(
-                  "inline-flex flex-1 items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
+                  "btn-pill inline-flex flex-1 items-center justify-center gap-2 px-5 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
                   isAdded
                     ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200 hover:bg-emerald-100"
-                    : "bg-brand-600 text-white shadow-sm shadow-brand-600/30 hover:bg-brand-700"
+                    : "bg-ink-900 text-white shadow-sm hover:bg-brand-600"
                 )}
               >
                 {isAdded ? (
@@ -238,7 +240,7 @@ export function ProfileDetailPage() {
                   href={user.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+                  className="btn-pill inline-flex flex-1 items-center justify-center gap-2 border border-ink-900/10 bg-white px-5 py-3 text-sm font-semibold text-ink-900 hover:border-ink-900/20 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
                 >
                   View on {meta.label} <ExternalLink className="h-4 w-4" />
                 </a>

@@ -53,7 +53,7 @@ export function SelectedProfilesDrawer() {
         aria-label={`Open shortlist, ${count} ${
           count === 1 ? "creator" : "creators"
         } selected`}
-        className="relative inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+        className="btn-pill relative inline-flex items-center gap-2 border border-ink-900/10 bg-white px-4 py-2 text-sm font-medium text-ink-900 shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:border-ink-900/20 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
       >
         <ListChecks className="h-4 w-4" />
         <span className="hidden sm:inline">Shortlist</span>
@@ -68,7 +68,7 @@ export function SelectedProfilesDrawer() {
         <>
           <div
             className={cn(
-              "fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300",
+              "fixed inset-0 z-[100] bg-ink-900/30 backdrop-blur-sm transition-opacity duration-300 ease-out",
               isOpen ? "opacity-100" : "pointer-events-none opacity-0"
             )}
             onClick={() => setIsOpen(false)}
@@ -80,14 +80,16 @@ export function SelectedProfilesDrawer() {
             aria-modal="true"
             aria-label="Selected creators shortlist"
             className={cn(
-              "fixed inset-y-0 right-0 z-[101] flex w-full max-w-md flex-col bg-white shadow-2xl transition-transform duration-300 ease-out",
+              "fixed inset-y-0 right-0 z-[101] flex w-full max-w-md flex-col bg-white shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
               isOpen ? "translate-x-0" : "translate-x-full"
             )}
           >
-            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+            <div className="flex items-center justify-between border-b border-ink-900/[0.06] px-6 py-4">
               <div>
-                <h2 className="text-lg font-bold text-slate-900">Shortlist</h2>
-                <p className="text-xs text-slate-500">
+                <h2 className="text-lg font-semibold tracking-[-0.01em] text-ink-900">
+                  Shortlist
+                </h2>
+                <p className="text-xs text-ink-400">
                   {count} {count === 1 ? "creator" : "creators"} selected
                 </p>
               </div>
@@ -95,7 +97,7 @@ export function SelectedProfilesDrawer() {
                 ref={closeButtonRef}
                 onClick={() => setIsOpen(false)}
                 aria-label="Close shortlist"
-                className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                className="rounded-full p-2 text-ink-400 transition-colors hover:bg-slate-100 hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -104,13 +106,13 @@ export function SelectedProfilesDrawer() {
             <div className="flex-1 overflow-y-auto p-4">
               {count === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-ink-400">
                     <Users className="h-7 w-7" />
                   </div>
-                  <p className="font-semibold text-slate-700">
+                  <p className="font-semibold text-ink-900">
                     Your shortlist is empty
                   </p>
-                  <p className="max-w-[16rem] text-sm text-slate-500">
+                  <p className="max-w-[16rem] text-sm text-ink-600">
                     Add creators from the search results to build your list.
                   </p>
                 </div>
@@ -119,7 +121,7 @@ export function SelectedProfilesDrawer() {
                   {selectedProfiles.map((profile) => (
                     <li
                       key={`${profile.platform}-${profile.username}`}
-                      className="flex items-center gap-3 rounded-xl border border-slate-200 p-3"
+                      className="flex items-center gap-3 rounded-2xl border border-ink-900/[0.06] p-3"
                     >
                       <img
                         src={profile.picture}
@@ -128,10 +130,10 @@ export function SelectedProfilesDrawer() {
                         className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-slate-100"
                       />
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-semibold text-slate-900">
+                        <p className="truncate text-sm font-semibold text-ink-900">
                           {profile.fullname}
                         </p>
-                        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                        <div className="flex items-center gap-1.5 text-xs text-ink-400">
                           <span
                             className={cn(
                               "h-2 w-2 rounded-full",
@@ -146,7 +148,7 @@ export function SelectedProfilesDrawer() {
                       <button
                         onClick={() => removeProfile(profile.username)}
                         aria-label={`Remove ${profile.username} from shortlist`}
-                        className="rounded-lg p-2 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                        className="rounded-full p-2 text-ink-400 transition-colors hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -157,16 +159,16 @@ export function SelectedProfilesDrawer() {
             </div>
 
             {count > 0 && (
-              <div className="space-y-2 border-t border-slate-200 p-4">
+              <div className="space-y-2 border-t border-ink-900/[0.06] p-4">
                 <button
                   onClick={handleExport}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-brand-600 px-4 py-3 text-sm font-semibold text-white shadow-sm shadow-brand-600/30 transition-colors hover:bg-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+                  className="btn-pill inline-flex w-full items-center justify-center gap-2 bg-ink-900 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
                 >
                   <Download className="h-4 w-4" /> Export as JSON
                 </button>
                 <button
                   onClick={clear}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-slate-500 transition-colors hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                  className="btn-pill inline-flex w-full items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-ink-400 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                 >
                   Clear all
                 </button>

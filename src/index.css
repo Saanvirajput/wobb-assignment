@@ -7,7 +7,8 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-  /* Brand scale (indigo / violet) used for primary actions & accents */
+  /* Brand scale (indigo / violet) — used sparingly, as a precise accent
+     rather than a wash, in the spirit of restraint over decoration. */
   --color-brand-50: #eef2ff;
   --color-brand-100: #e0e7ff;
   --color-brand-200: #c7d2fe;
@@ -17,6 +18,13 @@
   --color-brand-600: #4f46e5;
   --color-brand-700: #4338ca;
   --color-brand-800: #3730a3;
+
+  /* Neutral "ink" scale for text — slightly warmer/softer than slate. */
+  --color-ink-900: #1d1d1f;
+  --color-ink-600: #6e6e73;
+  --color-ink-400: #86868b;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -28,24 +36,23 @@
   }
 
   body {
-    background-color: #f8fafc;
-    /* Soft, page-wide aurora wash — set directly on the body's own
-       background (rather than a negative z-index pseudo-element) so it
-       paints reliably above the canvas in every browser. */
+    background-color: #fbfbfd;
+    /* A very soft, low-saturation wash — quiet enough to disappear at a
+       glance, present enough to keep the page from feeling flat. */
     background-image: radial-gradient(
-        50rem 32rem at 12% -8%,
-        rgba(99, 102, 241, 0.12),
+        46rem 30rem at 12% -10%,
+        rgba(99, 102, 241, 0.08),
         transparent 60%
       ),
-      radial-gradient(40rem 28rem at 100% 0%, rgba(168, 85, 247, 0.1), transparent 55%),
-      radial-gradient(45rem 30rem at 50% 110%, rgba(56, 189, 248, 0.07), transparent 60%);
+      radial-gradient(38rem 26rem at 100% 0%, rgba(168, 85, 247, 0.06), transparent 55%);
     background-attachment: fixed;
     background-repeat: no-repeat;
-    color: #0f172a;
+    color: var(--color-ink-900);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   }
 
   /* Honour reduced-motion preferences for everyone */
@@ -67,62 +74,58 @@
 @layer components {
   .card {
     background-color: #ffffff;
-    border: 1px solid rgb(226 232 240); /* slate-200 */
-    border-radius: 1rem;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04),
-      0 1px 3px rgba(15, 23, 42, 0.06);
+    border: 1px solid rgb(234 234 237);
+    border-radius: 1.25rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03), 0 1px 1px rgba(15, 23, 42, 0.02);
+    transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo),
+      border-color 0.4s var(--ease-out-expo);
   }
 
   /* Frosted surface for the sticky header */
   .glass {
-    background-color: rgba(255, 255, 255, 0.75);
-    backdrop-filter: saturate(180%) blur(12px);
-    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    background-color: rgba(251, 251, 253, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
   }
 
   /* Faint dot grid used behind the hero — fades out toward the edges via
      a radial mask so it never competes with the page background. */
   .dot-grid {
-    background-image: radial-gradient(rgba(79, 70, 229, 0.18) 1px, transparent 1px);
-    background-size: 22px 22px;
-    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 35%, #000 40%, transparent 80%);
-    mask-image: radial-gradient(ellipse 60% 60% at 50% 35%, #000 40%, transparent 80%);
+    background-image: radial-gradient(rgba(110, 110, 115, 0.16) 1px, transparent 1px);
+    background-size: 24px 24px;
+    -webkit-mask-image: radial-gradient(ellipse 55% 55% at 50% 35%, #000 35%, transparent 75%);
+    mask-image: radial-gradient(ellipse 55% 55% at 50% 35%, #000 35%, transparent 75%);
   }
 
-  /* Soft glow behind the gradient headline text. drop-shadow (not
-     text-shadow) so it follows the glyph alpha even with a transparent,
-     background-clip: text fill. */
+  /* Soft glow behind the gradient headline text — restrained, not neon.
+     drop-shadow (not text-shadow) so it follows the glyph alpha even
+     with a transparent, background-clip: text fill. */
   .glow-text {
-    filter: drop-shadow(0 0 14px rgba(99, 102, 241, 0.35))
-      drop-shadow(0 0 30px rgba(168, 85, 247, 0.2));
-    animation: glow-pulse 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.22))
+      drop-shadow(0 0 24px rgba(168, 85, 247, 0.12));
+    animation: glow-pulse 6s var(--ease-out-expo) infinite;
   }
 
-  /* Gentle breathing ring around the hero eyebrow badge. */
-  .badge-glow {
-    animation: badge-pulse 3s ease-in-out infinite;
+  /* A pill button with Apple-style press feedback. */
+  .btn-pill {
+    border-radius: 9999px;
+    transition: transform 0.25s var(--ease-out-expo), background-color 0.25s var(--ease-out-expo),
+      box-shadow 0.25s var(--ease-out-expo), color 0.25s var(--ease-out-expo);
+  }
+  .btn-pill:active {
+    transform: scale(0.96);
   }
 }
 
 @keyframes glow-pulse {
   0%,
   100% {
-    filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.3))
-      drop-shadow(0 0 24px rgba(168, 85, 247, 0.16));
+    filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.18))
+      drop-shadow(0 0 18px rgba(168, 85, 247, 0.1));
   }
   50% {
-    filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.5))
-      drop-shadow(0 0 40px rgba(168, 85, 247, 0.28));
-  }
-}
-
-@keyframes badge-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.18);
-  }
-  50% {
-    box-shadow: 0 0 0 6px rgba(79, 70, 229, 0);
+    filter: drop-shadow(0 0 14px rgba(99, 102, 241, 0.3))
+      drop-shadow(0 0 30px rgba(168, 85, 247, 0.18));
   }
 }
 
@@ -137,10 +140,10 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgb(203 213 225); /* slate-300 */
+  background: rgb(210 210 215);
   border-radius: 9999px;
-  border: 2px solid #f8fafc;
+  border: 2px solid #fbfbfd;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(148 163 184); /* slate-400 */
+  background: rgb(170 170 178);
 }

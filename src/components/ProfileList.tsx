@@ -10,27 +10,27 @@ interface ProfileListProps {
 
 const container = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.04 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.035 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 14 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring" as const, stiffness: 320, damping: 26 },
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
   },
 };
 
 export function ProfileList({ profiles, platform }: ProfileListProps) {
   if (profiles.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white/50 py-20 text-center">
-        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-ink-900/10 bg-white/50 py-20 text-center">
+        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-ink-400">
           <SearchX className="h-7 w-7" />
         </div>
-        <p className="text-lg font-semibold text-slate-700">No creators found</p>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="text-lg font-semibold text-ink-900">No creators found</p>
+        <p className="mt-1 text-sm text-ink-600">
           Try a different name, username, or platform.
         </p>
       </div>

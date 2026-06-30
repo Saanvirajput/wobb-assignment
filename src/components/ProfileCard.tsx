@@ -45,12 +45,12 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
       role="button"
       tabIndex={0}
       aria-label={`View ${profile.fullname} (@${profile.username})`}
-      className="card group flex cursor-pointer flex-col p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+      className="card group flex cursor-pointer flex-col p-6 hover:-translate-y-1 hover:border-ink-900/[0.08] hover:shadow-[0_20px_40px_-12px_rgba(15,23,42,0.12)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
     >
       <div className="flex items-start gap-4">
         <div className="relative shrink-0">
           {imgFailed ? (
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-lg font-bold text-slate-400 ring-2 ring-slate-100">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-lg font-semibold text-ink-400 ring-2 ring-slate-100">
               {(profile.username || profile.fullname || "?").charAt(0).toUpperCase()}
             </div>
           ) : (
@@ -73,12 +73,12 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
-            <h3 className="truncate font-semibold text-slate-900">
+            <h3 className="truncate font-semibold tracking-[-0.01em] text-ink-900">
               {profile.fullname}
             </h3>
             <VerifiedBadge verified={profile.is_verified} className="h-4 w-4" />
           </div>
-          <p className="truncate text-sm text-slate-500">@{profile.username}</p>
+          <p className="truncate text-[13px] text-ink-400">@{profile.username}</p>
           <span
             className={cn(
               "mt-2 inline-block rounded-full px-2.5 py-0.5 text-[11px] font-semibold tracking-wide",
@@ -90,18 +90,18 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
         </div>
       </div>
 
-      <dl className="mt-5 grid grid-cols-2 gap-3 border-t border-slate-100 pt-4">
+      <dl className="mt-5 grid grid-cols-2 gap-3 border-t border-ink-900/[0.06] pt-4">
         <div>
-          <dt className="flex items-center gap-1 text-xs font-medium text-slate-400">
+          <dt className="flex items-center gap-1 text-xs font-medium text-ink-400">
             <Users className="h-3.5 w-3.5" /> Followers
           </dt>
-          <dd className="mt-0.5 text-lg font-bold text-slate-900">
+          <dd className="mt-0.5 text-lg font-semibold tracking-[-0.01em] text-ink-900">
             {formatCompact(profile.followers)}
           </dd>
         </div>
         <div>
-          <dt className="text-xs font-medium text-slate-400">Engagement</dt>
-          <dd className="mt-0.5 text-lg font-bold text-slate-900">
+          <dt className="text-xs font-medium text-ink-400">Engagement</dt>
+          <dd className="mt-0.5 text-lg font-semibold tracking-[-0.01em] text-ink-900">
             {formatEngagementRate(profile.engagement_rate)}
           </dd>
         </div>
@@ -116,10 +116,10 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
             : `Add ${profile.username} to list`
         }
         className={cn(
-          "mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
+          "btn-pill mt-5 inline-flex w-full items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
           isAdded
             ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200 hover:bg-emerald-100"
-            : "bg-brand-600 text-white shadow-sm shadow-brand-600/30 hover:bg-brand-700"
+            : "bg-ink-900 text-white shadow-sm hover:bg-brand-600"
         )}
       >
         {isAdded ? (

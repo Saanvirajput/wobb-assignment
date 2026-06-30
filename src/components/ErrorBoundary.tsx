@@ -27,12 +27,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6 text-slate-900">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-[#fbfbfd] px-6 text-ink-900">
           <div className="card max-w-md p-10 text-center">
-            <h1 className="text-2xl font-bold tracking-tight">
+            <h1 className="text-2xl font-semibold tracking-[-0.02em]">
               Something went wrong
             </h1>
-            <p className="mt-3 text-sm text-slate-500">
+            <p className="mt-3 text-sm text-ink-600">
               {this.state.error?.message || "An unexpected error occurred."}
             </p>
             <button
@@ -40,7 +40,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 this.setState({ hasError: false, error: null });
                 window.location.href = import.meta.env.BASE_URL;
               }}
-              className="mt-6 inline-flex items-center justify-center rounded-lg bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm shadow-brand-600/30 transition-colors hover:bg-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+              className="btn-pill mt-6 inline-flex items-center justify-center bg-ink-900 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
             >
               Back to home
             </button>

@@ -19,22 +19,22 @@ export function Layout({ children }: LayoutProps) {
       </a>
 
       <header
-        className="sticky top-0 z-30 glass border-b border-slate-200/70"
+        className="sticky top-0 z-30 glass border-b border-ink-900/[0.06]"
         role="banner"
       >
         <nav
-          className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6"
+          className="mx-auto flex h-[60px] max-w-6xl items-center justify-between px-4 sm:px-6"
           aria-label="Main navigation"
         >
           <Link
             to="/"
-            className="group flex items-center gap-2.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+            className="group flex items-center gap-2 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
             aria-label="Vibe — go to homepage"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-600 to-violet-500 text-white shadow-sm shadow-brand-600/30 transition-transform group-hover:scale-105">
-              <Sparkles className="h-5 w-5" />
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-ink-900 text-white transition-transform duration-300 ease-out group-hover:scale-105">
+              <Sparkles className="h-3.5 w-3.5" />
             </span>
-            <span className="text-lg font-extrabold tracking-tight text-slate-900">
+            <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink-900">
               Vibe
             </span>
           </Link>
@@ -51,10 +51,10 @@ export function Layout({ children }: LayoutProps) {
         {children}
       </main>
 
-      <footer className="border-t border-slate-200 py-8 text-center text-sm text-slate-500">
+      <footer className="border-t border-ink-900/[0.06] py-10 text-center text-[13px] text-ink-400">
         <p>
           Built with React, TypeScript &amp; Zustand ·{" "}
-          <span className="font-medium text-slate-600">Vibe</span> creator search
+          <span className="font-medium text-ink-600">Vibe</span> creator search
         </p>
       </footer>
     </div>
