@@ -70,6 +70,14 @@ export function ProfileDetailPage() {
     username: string;
     user: FullUserProfile | null;
   } | null>(null);
+  // Tagged with username (same pattern as `result`) so switching profiles
+  // doesn't carry over a stale "image failed" flag without an extra effect.
+  const [avatarState, setAvatarState] = useState<{
+    username: string;
+    failed: boolean;
+  } | null>(null);
+  const avatarFailed =
+    avatarState?.username === username && (avatarState?.failed ?? false);
 
   useEffect(() => {
     if (!username) return;
@@ -162,11 +170,20 @@ export function ProfileDetailPage() {
           <div className="h-24 bg-gradient-to-r from-brand-600 to-violet-500" />
           <div className="px-6 pb-6 sm:px-8 sm:pb-8">
             <div className="-mt-12 flex flex-col items-center text-center sm:flex-row sm:items-end sm:text-left">
-              <img
-                src={user.picture}
-                alt={`${user.username}'s avatar`}
-                className="h-24 w-24 rounded-2xl object-cover ring-4 ring-white"
-              />
+              {avatarFailed ? (
+                <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-slate-100 text-3xl font-bold text-slate-400 ring-4 ring-white">
+                  {(user.username || user.fullname || "?").charAt(0).toUpperCase()}
+                </div>
+              ) : (
+                <img
+                  src={user.picture}
+                  alt={`${user.username}'s avatar`}
+                  onError={() =>
+                    setAvatarState({ username: user.username, failed: true })
+                  }
+                  className="h-24 w-24 rounded-2xl object-cover ring-4 ring-white"
+                />
+              )}
               <div className="mt-4 sm:ml-5 sm:mt-0 sm:pb-1">
                 <div className="flex items-center justify-center gap-1.5 sm:justify-start">
                   <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">

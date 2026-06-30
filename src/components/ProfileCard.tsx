@@ -51,7 +51,7 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
         <div className="relative shrink-0">
           {imgFailed ? (
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-lg font-bold text-slate-400 ring-2 ring-slate-100">
-              {profile.username.charAt(0).toUpperCase()}
+              {(profile.username || profile.fullname || "?").charAt(0).toUpperCase()}
             </div>
           ) : (
             <img

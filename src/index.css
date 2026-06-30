@@ -29,23 +29,23 @@
 
   body {
     background-color: #f8fafc;
+    /* Soft, page-wide aurora wash — set directly on the body's own
+       background (rather than a negative z-index pseudo-element) so it
+       paints reliably above the canvas in every browser. */
+    background-image: radial-gradient(
+        50rem 32rem at 12% -8%,
+        rgba(99, 102, 241, 0.12),
+        transparent 60%
+      ),
+      radial-gradient(40rem 28rem at 100% 0%, rgba(168, 85, 247, 0.1), transparent 55%),
+      radial-gradient(45rem 30rem at 50% 110%, rgba(56, 189, 248, 0.07), transparent 60%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     color: #0f172a;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-  }
-
-  /* Soft decorative aurora behind the app — purely cosmetic */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background:
-      radial-gradient(40rem 40rem at 15% -10%, rgba(99, 102, 241, 0.12), transparent 60%),
-      radial-gradient(35rem 35rem at 100% 0%, rgba(168, 85, 247, 0.1), transparent 55%);
   }
 
   /* Honour reduced-motion preferences for everyone */
@@ -78,6 +78,15 @@
     background-color: rgba(255, 255, 255, 0.75);
     backdrop-filter: saturate(180%) blur(12px);
     -webkit-backdrop-filter: saturate(180%) blur(12px);
+  }
+
+  /* Faint dot grid used behind the hero — fades out toward the edges via
+     a radial mask so it never competes with the page background. */
+  .dot-grid {
+    background-image: radial-gradient(rgba(79, 70, 229, 0.18) 1px, transparent 1px);
+    background-size: 22px 22px;
+    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 35%, #000 40%, transparent 80%);
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 35%, #000 40%, transparent 80%);
   }
 }
 

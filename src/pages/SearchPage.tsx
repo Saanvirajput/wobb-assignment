@@ -72,7 +72,21 @@ export function SearchPage() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="mx-auto mb-10 max-w-3xl text-center">
+      <section className="relative mx-auto mb-10 max-w-3xl overflow-hidden px-4 pb-2 pt-6 text-center sm:px-0">
+        {/* Decorative background — contained to the hero, purely cosmetic */}
+        <div
+          aria-hidden="true"
+          className="dot-grid pointer-events-none absolute inset-0 -z-10"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-72 w-72 -translate-x-[60%] rounded-full bg-brand-400/25 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-16 left-1/2 -z-10 h-72 w-72 translate-x-[10%] rounded-full bg-violet-400/20 blur-3xl"
+        />
+
         <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
           ✨ Creator discovery, reimagined
         </span>

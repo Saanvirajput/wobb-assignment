@@ -42,9 +42,22 @@ export function getSearchData(platform: Platform): SearchData {
   return platformData[platform];
 }
 
+/**
+ * Some real-world platform data (notably YouTube) omits `username` and only
+ * provides `handle` or `user_id`. Normalising here guarantees every profile
+ * downstream has a non-empty, stable `username` to key off (cards, routing,
+ * the shortlist store).
+ */
+function normalizeProfile(profile: UserProfileSummary): UserProfileSummary {
+  if (profile.username) return profile;
+  return { ...profile, username: profile.handle || profile.user_id };
+}
+
 export function extractProfiles(platform: Platform): UserProfileSummary[] {
   const data = getSearchData(platform);
-  return data.accounts.map((item) => item.account.user_profile);
+  return data.accounts.map((item) =>
+    normalizeProfile(item.account.user_profile)
+  );
 }
 
 export function filterProfiles(
