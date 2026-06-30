@@ -1,6 +1,6 @@
-import { Search, Camera, Tv, Smartphone } from "lucide-react";
+import { Search, X, Camera, Play, Music2 } from "lucide-react";
 import type { Platform } from "@/types";
-import { PLATFORMS, getPlatformLabel } from "@/utils/dataHelpers";
+import { PLATFORMS, PLATFORM_META } from "@/utils/dataHelpers";
 import { cn } from "@/utils/cn";
 
 interface PlatformFilterProps {
@@ -10,13 +10,10 @@ interface PlatformFilterProps {
   onSearchChange: (value: string) => void;
 }
 
-const PlatformIcon = ({ platform, className }: { platform: Platform, className?: string }) => {
-  switch (platform) {
-    case "instagram": return <Camera className={className} />;
-    case "youtube": return <Tv className={className} />;
-    case "tiktok": return <Smartphone className={className} />;
-    default: return null;
-  }
+const PLATFORM_ICONS: Record<Platform, typeof Camera> = {
+  instagram: Camera,
+  youtube: Play,
+  tiktok: Music2,
 };
 
 export function PlatformFilter({
@@ -26,41 +23,62 @@ export function PlatformFilter({
   onSearchChange,
 }: PlatformFilterProps) {
   return (
-    <div className="mb-12 space-y-8 max-w-3xl mx-auto px-4">
-      <div className="relative group">
-        <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-          <Search className="h-6 w-6 text-slate-400 group-focus-within:text-coke transition-colors" />
-        </div>
+    <div className="mx-auto mb-10 max-w-2xl space-y-5">
+      {/* Search */}
+      <div className="group relative">
+        <Search
+          className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-brand-600"
+          aria-hidden="true"
+        />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="SEARCH BY USERNAME OR NAME..."
+          placeholder="Search by username or name…"
           aria-label="Search influencers by username or full name"
-          className="w-full liquid-silver text-slate-800 placeholder-slate-500 text-lg md:text-xl font-bold uppercase tracking-wider pl-16 pr-6 py-5 focus:outline-none focus:border-coke transition-all focus:ring-2 focus:ring-coke-red/30"
+          className="w-full rounded-xl border border-slate-200 bg-white py-3.5 pl-12 pr-11 text-base text-slate-900 shadow-sm transition-all placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-500/15"
         />
+        {searchQuery && (
+          <button
+            type="button"
+            onClick={() => onSearchChange("")}
+            aria-label="Clear search"
+            className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
-      <div className="flex flex-wrap gap-4 justify-center" role="tablist" aria-label="Filter by platform">
-        {PLATFORMS.map((p) => (
-          <button
-            key={p}
-            type="button"
-            role="tab"
-            aria-selected={selected === p}
-            aria-label={`Filter by ${getPlatformLabel(p)}`}
-            onClick={() => onChange(p)}
-            className={cn(
-              "flex items-center gap-3 px-8 py-4 font-black uppercase tracking-widest transition-all duration-300 border focus:outline-none focus:ring-2 focus:ring-coke-red/30",
-              selected === p
-                ? "coke-panel border-coke"
-                : "liquid-silver text-slate-500 hover:text-coke hover:border-coke"
-            )}
-          >
-            <PlatformIcon platform={p} className="w-5 h-5" />
-            {getPlatformLabel(p)}
-          </button>
-        ))}
+      {/* Platform tabs */}
+      <div
+        className="flex flex-wrap justify-center gap-2.5"
+        role="tablist"
+        aria-label="Filter by platform"
+      >
+        {PLATFORMS.map((p) => {
+          const Icon = PLATFORM_ICONS[p];
+          const isActive = selected === p;
+          return (
+            <button
+              key={p}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              aria-label={`Filter by ${PLATFORM_META[p].label}`}
+              onClick={() => onChange(p)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
+                isActive
+                  ? "border-brand-600 bg-brand-600 text-white shadow-sm shadow-brand-600/30"
+                  : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+              )}
+            >
+              <Icon className="h-4 w-4" />
+              {PLATFORM_META[p].label}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

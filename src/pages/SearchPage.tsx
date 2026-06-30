@@ -1,37 +1,47 @@
 import { useState, useMemo, useEffect } from "react";
+import { ArrowUpDown } from "lucide-react";
 import type { Platform, UserProfileSummary } from "@/types";
 import { Layout } from "@/components/Layout";
 import { PlatformFilter } from "@/components/PlatformFilter";
 import { ProfileList } from "@/components/ProfileList";
 import { extractProfiles, filterProfiles } from "@/utils/dataHelpers";
-import { ArrowUpDown } from "lucide-react";
-type SortOption = "default" | "followers_desc" | "followers_asc" | "engagement_desc" | "engagement_asc";
+
+type SortOption =
+  | "default"
+  | "followers_desc"
+  | "followers_asc"
+  | "engagement_desc"
+  | "engagement_asc";
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: "default", label: "Default" },
-  { value: "followers_desc", label: "Followers ↓" },
-  { value: "followers_asc", label: "Followers ↑" },
-  { value: "engagement_desc", label: "Engagement ↓" },
-  { value: "engagement_asc", label: "Engagement ↑" },
+  { value: "default", label: "Relevance" },
+  { value: "followers_desc", label: "Most followers" },
+  { value: "followers_asc", label: "Fewest followers" },
+  { value: "engagement_desc", label: "Highest engagement" },
+  { value: "engagement_asc", label: "Lowest engagement" },
 ];
 
-function sortProfiles(profiles: UserProfileSummary[], sort: SortOption): UserProfileSummary[] {
+function sortProfiles(
+  profiles: UserProfileSummary[],
+  sort: SortOption
+): UserProfileSummary[] {
   if (sort === "default") return profiles;
-
-  return [...profiles].sort((a, b) => {
+  const sorted = [...profiles];
+  sorted.sort((a, b) => {
     switch (sort) {
       case "followers_desc":
         return b.followers - a.followers;
       case "followers_asc":
         return a.followers - b.followers;
       case "engagement_desc":
-        return (b.engagement_rate || 0) - (a.engagement_rate || 0);
+        return (b.engagement_rate ?? 0) - (a.engagement_rate ?? 0);
       case "engagement_asc":
-        return (a.engagement_rate || 0) - (b.engagement_rate || 0);
+        return (a.engagement_rate ?? 0) - (b.engagement_rate ?? 0);
       default:
         return 0;
     }
   });
+  return sorted;
 }
 
 export function SearchPage() {
@@ -39,76 +49,81 @@ export function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("default");
 
-  // Dynamic page title
   useEffect(() => {
-    document.title = "Vibe — Influencer Search Platform";
+    document.title = "Vibe — Influencer Search";
   }, []);
 
   const allProfiles = useMemo(() => extractProfiles(platform), [platform]);
-
   const filtered = useMemo(
     () => filterProfiles(allProfiles, searchQuery),
     [allProfiles, searchQuery]
   );
-
   const sorted = useMemo(
     () => sortProfiles(filtered, sortBy),
     [filtered, sortBy]
   );
 
+  const handlePlatformChange = (p: Platform) => {
+    setPlatform(p);
+    setSearchQuery("");
+    setSortBy("default");
+  };
+
   return (
     <Layout>
-      <div className="text-center mb-16 mt-12 md:mt-24">
-        <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-coke tracking-tighter uppercase mb-6 leading-none">
-          Find Creators.<br />
-          <span className="text-slate-500">Elevate Brands.</span>
-        </h2>
-        <p className="text-lg md:text-xl text-slate-700 max-w-3xl mx-auto font-medium tracking-wide">
-          Analyze and select the most influential voices across major social platforms.
+      {/* Hero */}
+      <section className="mx-auto mb-10 max-w-3xl text-center">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+          ✨ Creator discovery, reimagined
+        </span>
+        <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+          Find the right{" "}
+          <span className="bg-gradient-to-r from-brand-600 to-violet-500 bg-clip-text text-transparent">
+            creators
+          </span>{" "}
+          for your brand
+        </h1>
+        <p className="mx-auto mt-4 max-w-xl text-base text-slate-600 sm:text-lg">
+          Search and shortlist top voices across Instagram, YouTube, and TikTok —
+          all in one place.
         </p>
-      </div>
+      </section>
 
       <PlatformFilter
         selected={platform}
-        onChange={(p) => {
-          setPlatform(p);
-          setSearchQuery("");
-          setSortBy("default");
-        }}
+        onChange={handlePlatformChange}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />
 
-      <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 px-4 border-b border-slate-300 pb-4 gap-4">
-        <p className="text-sm font-bold text-slate-600 uppercase tracking-widest">
-          Showing <span className="text-coke">{sorted.length}</span> results on <span className="text-coke">{platform}</span>
+      {/* Results toolbar */}
+      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-slate-600" aria-live="polite">
+          <span className="font-semibold text-slate-900">{sorted.length}</span>{" "}
+          {sorted.length === 1 ? "creator" : "creators"}
         </p>
 
-        <div className="relative group flex items-center">
-          <ArrowUpDown className="w-4 h-4 text-slate-500 absolute left-4 pointer-events-none z-10 group-hover:text-coke transition-colors" />
+        <div className="relative">
+          <ArrowUpDown className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
-            aria-label="Sort profiles"
-            className="appearance-none liquid-silver text-slate-800 text-xs font-black uppercase tracking-widest pl-10 pr-10 py-3 focus:outline-none focus:border-coke transition-all focus:ring-2 focus:ring-coke-red/30 cursor-pointer border-slate-300 hover:border-coke"
+            aria-label="Sort creators"
+            className="cursor-pointer appearance-none rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-9 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:border-slate-300 focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-500/15"
           >
             {SORT_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value} className="bg-slate-100 text-slate-800 font-bold">
+              <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>
             ))}
           </select>
-          <div className="absolute right-4 pointer-events-none text-slate-500 group-hover:text-coke transition-colors text-xs font-bold z-10">
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">
             ▼
-          </div>
+          </span>
         </div>
       </div>
 
-      <ProfileList
-        profiles={sorted}
-        platform={platform}
-        searchQuery={searchQuery}
-      />
+      <ProfileList profiles={sorted} platform={platform} />
     </Layout>
   );
 }

@@ -1,57 +1,62 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { Sparkles } from "lucide-react";
 import { SelectedProfilesDrawer } from "./SelectedProfilesDrawer";
 
 interface LayoutProps {
   children: ReactNode;
-  title?: string;
 }
 
-export function Layout({ children, title }: LayoutProps) {
+export function Layout({ children }: LayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col font-sans text-slate-900 relative">
-      {/* Skip to content link — accessibility best practice */}
+    <div className="min-h-screen flex flex-col font-sans text-slate-900">
+      {/* Accessibility: jump straight to content with the keyboard */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:font-bold"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg"
       >
         Skip to main content
       </a>
 
       <header
-        className="sticky top-0 z-30 liquid-silver border-b border-white/50"
+        className="sticky top-0 z-30 glass border-b border-slate-200/70"
         role="banner"
       >
         <nav
-          className="max-w-6xl mx-auto px-6 h-24 flex items-center justify-between"
+          className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6"
           aria-label="Main navigation"
         >
           <Link
             to="/"
-            className="text-2xl md:text-3xl font-black tracking-tighter uppercase flex items-center gap-3 text-coke hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-coke-red"
-            aria-label="Vibe — Go to homepage"
+            className="group flex items-center gap-2.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+            aria-label="Vibe — go to homepage"
           >
-            <div className="w-10 h-10 coke-panel flex items-center justify-center font-serif italic text-xl pr-0.5">
-              V
-            </div>
-            VIBE
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-600 to-violet-500 text-white shadow-sm shadow-brand-600/30 transition-transform group-hover:scale-105">
+              <Sparkles className="h-5 w-5" />
+            </span>
+            <span className="text-lg font-extrabold tracking-tight text-slate-900">
+              Vibe
+            </span>
           </Link>
+
           <SelectedProfilesDrawer />
         </nav>
       </header>
 
       <main
         id="main-content"
-        className="flex-1 w-full max-w-6xl mx-auto px-6 py-12"
+        className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6 sm:py-12"
         role="main"
       >
-        {title && (
-          <h1 className="text-4xl md:text-6xl font-black mb-12 tracking-tighter uppercase text-coke">
-            {title}
-          </h1>
-        )}
         {children}
       </main>
+
+      <footer className="border-t border-slate-200 py-8 text-center text-sm text-slate-500">
+        <p>
+          Built with React, TypeScript &amp; Zustand ·{" "}
+          <span className="font-medium text-slate-600">Vibe</span> creator search
+        </p>
+      </footer>
     </div>
   );
 }

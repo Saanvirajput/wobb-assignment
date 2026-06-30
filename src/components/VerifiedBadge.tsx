@@ -1,8 +1,18 @@
+import { BadgeCheck } from "lucide-react";
+import { cn } from "@/utils/cn";
+
 interface VerifiedBadgeProps {
   verified: boolean;
+  className?: string;
 }
 
-export function VerifiedBadge({ verified }: VerifiedBadgeProps) {
+export function VerifiedBadge({ verified, className }: VerifiedBadgeProps) {
   if (!verified) return null;
-  return <span className="text-blue-500 text-xs ml-1">✓</span>;
+  return (
+    <BadgeCheck
+      role="img"
+      aria-label="Verified account"
+      className={cn("inline-block shrink-0 text-brand-600", className)}
+    />
+  );
 }

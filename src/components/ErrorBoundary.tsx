@@ -27,22 +27,22 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white px-6">
-          <div className="max-w-lg text-center">
-            <h1 className="text-6xl font-black uppercase tracking-tighter mb-6">
-              Something broke.
+        <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6 text-slate-900">
+          <div className="card max-w-md p-10 text-center">
+            <h1 className="text-2xl font-bold tracking-tight">
+              Something went wrong
             </h1>
-            <p className="text-zinc-400 text-lg mb-8 font-medium">
+            <p className="mt-3 text-sm text-slate-500">
               {this.state.error?.message || "An unexpected error occurred."}
             </p>
             <button
               onClick={() => {
                 this.setState({ hasError: false, error: null });
-                window.location.href = "/";
+                window.location.href = import.meta.env.BASE_URL;
               }}
-              className="px-8 py-4 bg-white text-black font-black uppercase tracking-widest hover:bg-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-white/30"
+              className="mt-6 inline-flex items-center justify-center rounded-lg bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm shadow-brand-600/30 transition-colors hover:bg-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
             >
-              Go Home
+              Back to home
             </button>
           </div>
         </div>

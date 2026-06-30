@@ -1,197 +1,281 @@
 import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  ArrowLeft,
+  Users,
+  Activity,
+  LayoutGrid,
+  Heart,
+  MessageCircle,
+  Eye,
+  Plus,
+  Check,
+  ExternalLink,
+} from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
 import type { FullUserProfile, ProfileDetailResponse, Platform } from "@/types";
-import { formatEngagementRate } from "@/utils/formatters";
+import { formatCompact, formatEngagementRate } from "@/utils/formatters";
 import { loadProfileByUsername } from "@/utils/profileLoader";
 import { useListStore } from "@/store/useListStore";
-import { motion } from "framer-motion";
-import { ArrowLeft, Users, Activity, LayoutGrid, Heart, MessageCircle, Play, Eye, Plus, Check } from "lucide-react";
+import { PLATFORM_META } from "@/utils/dataHelpers";
 import { cn } from "@/utils/cn";
 
-function formatFollowersDetail(count: number) {
-  if (count >= 1000000) return (count / 1000000).toFixed(2) + "M";
-  if (count >= 1000) return (count / 1000).toFixed(1) + "K";
-  return String(count);
+type Status = "loading" | "ready" | "error";
+
+function StatCard({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: React.ElementType;
+  label: string;
+  value: string | number;
+}) {
+  return (
+    <div className="card flex flex-col gap-2 p-5">
+      <div className="flex items-center gap-2 text-slate-400">
+        <Icon className="h-4 w-4" />
+        <span className="text-xs font-medium uppercase tracking-wide">
+          {label}
+        </span>
+      </div>
+      <span className="text-2xl font-bold tracking-tight text-slate-900">
+        {value}
+      </span>
+    </div>
+  );
 }
 
-const StatBox = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string | number }) => (
-  <div className="liquid-silver group border border-slate-300 p-8 flex flex-col items-center text-center gap-4 hover:border-coke transition-all">
-    <div className="text-slate-500 group-hover:text-coke transition-colors">
-      <Icon className="w-8 h-8" />
-    </div>
-    <div className="relative z-10">
-      <div className="text-3xl md:text-5xl font-black text-slate-800 tracking-tighter mb-2">{value}</div>
-      <div className="text-xs md:text-sm font-bold text-slate-600 uppercase tracking-widest">{label}</div>
-    </div>
-  </div>
-);
+function BackLink() {
+  return (
+    <Link
+      to="/"
+      className="inline-flex items-center gap-2 rounded-lg text-sm font-medium text-slate-600 transition-colors hover:text-brand-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+    >
+      <ArrowLeft className="h-4 w-4" /> Back to search
+    </Link>
+  );
+}
 
 export function ProfileDetailPage() {
   const { username } = useParams<{ username: string }>();
   const [searchParams] = useSearchParams();
-  const platform = (searchParams.get("platform") || "unknown") as Platform;
-  const [profileData, setProfileData] = useState<ProfileDetailResponse | null>(null);
-  const [loaded, setLoaded] = useState(false);
-  
-  const { addProfile, removeProfile, isProfileAdded } = useListStore();
+  const platform = (searchParams.get("platform") || "instagram") as Platform;
+
+  // Result is tagged with the username it belongs to, so status can be derived
+  // purely from render — no synchronous setState inside the effect.
+  const [result, setResult] = useState<{
+    username: string;
+    user: FullUserProfile | null;
+  } | null>(null);
 
   useEffect(() => {
     if (!username) return;
+    let active = true;
 
-    loadProfileByUsername(username).then((data) => {
-      setProfileData(data);
-      setLoaded(true);
-    });
+    loadProfileByUsername(username)
+      .then((data: ProfileDetailResponse | null) => {
+        if (!active) return;
+        const profile =
+          data?.data?.success && data.data.user_profile
+            ? data.data.user_profile
+            : null;
+        setResult({ username, user: profile });
+      })
+      .catch(() => active && setResult({ username, user: null }));
+
+    return () => {
+      active = false;
+    };
   }, [username]);
 
-  // Dynamic page title
+  const isResolved = !!username && result?.username === username;
+  const user = isResolved ? result.user : null;
+  const status: Status = !username
+    ? "error"
+    : !isResolved
+      ? "loading"
+      : user
+        ? "ready"
+        : "error";
+
+  const isAdded = useListStore((s) =>
+    user ? s.isSelected(user.username) : false
+  );
+  const toggleProfile = useListStore((s) => s.toggleProfile);
+
   useEffect(() => {
-    if (profileData?.data?.user_profile) {
-      document.title = `@${profileData.data.user_profile.username} — Vibe`;
-    } else if (username) {
-      document.title = `@${username} — Vibe`;
-    }
-    return () => { document.title = "Vibe — Influencer Search Platform"; };
-  }, [profileData, username]);
+    document.title = username ? `@${username} — Vibe` : "Vibe — Influencer Search";
+    return () => {
+      document.title = "Vibe — Influencer Search";
+    };
+  }, [username]);
 
-  if (!username) {
+  if (status === "loading") {
     return (
       <Layout>
-        <div className="text-center py-32">
-          <p className="text-3xl font-black text-slate-800 uppercase tracking-widest mb-8">Invalid profile</p>
-          <Link to="/" className="text-slate-600 hover:text-coke inline-flex items-center gap-3 font-bold uppercase tracking-widest transition-colors">
-            <ArrowLeft className="w-5 h-5" /> Return
-          </Link>
+        <div className="mb-8">
+          <BackLink />
+        </div>
+        <div className="flex justify-center py-32">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-brand-600" />
         </div>
       </Layout>
     );
   }
 
-  if (!loaded) {
+  if (status === "error" || !user) {
     return (
       <Layout>
-        <div className="flex justify-center items-center py-40">
-          <div className="animate-spin rounded-none h-16 w-16 border-4 border-slate-300 border-t-coke-red"></div>
+        <div className="mb-8">
+          <BackLink />
+        </div>
+        <div className="card mx-auto max-w-md p-10 text-center">
+          <p className="text-xl font-bold text-slate-900">Profile not found</p>
+          <p className="mt-2 text-sm text-slate-500">
+            We couldn't find details for{" "}
+            <span className="font-medium">@{username}</span>.
+          </p>
         </div>
       </Layout>
     );
   }
 
-  if (!profileData || !profileData.data.success) {
-    return (
-      <Layout>
-        <div className="text-center py-32">
-          <p className="text-3xl font-black text-coke uppercase tracking-widest mb-8">Profile Not Found</p>
-          <Link to="/" className="text-slate-600 hover:text-coke inline-flex items-center gap-3 font-bold uppercase tracking-widest transition-colors">
-            <ArrowLeft className="w-5 h-5" /> Return
-          </Link>
-        </div>
-      </Layout>
-    );
-  }
-
-  const user: FullUserProfile = profileData.data.user_profile;
-  const isAdded = isProfileAdded(user.username);
-
-  const handleListToggle = () => {
-    if (isAdded) {
-      removeProfile(user.username);
-    } else {
-      addProfile(user, platform);
-    }
-  };
+  const meta = PLATFORM_META[platform];
 
   return (
-    <Layout title="">
-      <Link to="/" className="inline-flex items-center gap-3 text-sm font-black uppercase tracking-widest text-slate-600 hover:text-coke mb-12 transition-colors">
-        <ArrowLeft className="w-5 h-5" /> Go Back
-      </Link>
+    <Layout>
+      <div className="mb-8">
+        <BackLink />
+      </div>
 
-      <motion.div 
-        initial={{ opacity: 0, y: 40 }}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
-        className="max-w-5xl mx-auto"
+        transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+        className="mx-auto max-w-4xl"
       >
-        <div className="flex flex-col items-center text-center mb-16">
-          <img
-            src={user.picture}
-            alt={`Profile of ${user.username}`}
-            className="w-40 h-40 md:w-56 md:h-56 object-cover border border-slate-300 droplet-shape grayscale mb-8 shadow-2xl"
-          />
-          
-          <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 tracking-tighter uppercase flex items-center justify-center gap-4 mb-4">
-            @{user.username}
-            <VerifiedBadge verified={user.is_verified} />
-          </h2>
-          
-          <p className="text-2xl text-slate-700 font-medium mb-6 tracking-wide">{user.fullname}</p>
-          
-          <span className="inline-block px-4 py-2 border border-slate-400 text-slate-600 text-sm font-black uppercase tracking-widest mb-10 bg-white/30 backdrop-blur-sm">
-            {platform}
-          </span>
+        {/* Header card */}
+        <div className="card overflow-hidden">
+          <div className="h-24 bg-gradient-to-r from-brand-600 to-violet-500" />
+          <div className="px-6 pb-6 sm:px-8 sm:pb-8">
+            <div className="-mt-12 flex flex-col items-center text-center sm:flex-row sm:items-end sm:text-left">
+              <img
+                src={user.picture}
+                alt={`${user.username}'s avatar`}
+                className="h-24 w-24 rounded-2xl object-cover ring-4 ring-white"
+              />
+              <div className="mt-4 sm:ml-5 sm:mt-0 sm:pb-1">
+                <div className="flex items-center justify-center gap-1.5 sm:justify-start">
+                  <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">
+                    {user.fullname}
+                  </h1>
+                  <VerifiedBadge verified={user.is_verified} className="h-5 w-5" />
+                </div>
+                <div className="mt-1 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                  <span className="text-sm text-slate-500">@{user.username}</span>
+                  <span
+                    className={cn(
+                      "rounded-full px-2.5 py-0.5 text-[11px] font-semibold",
+                      meta.badgeClass
+                    )}
+                  >
+                    {meta.label}
+                  </span>
+                </div>
+              </div>
+            </div>
 
-          {user.description && (
-            <p className="text-slate-600 max-w-3xl text-lg md:text-xl font-medium leading-relaxed mb-10">{user.description}</p>
-          )}
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-md">
-            <button
-              onClick={handleListToggle}
-              className={cn(
-                "w-full flex items-center justify-center gap-3 px-8 py-5 text-sm font-black uppercase tracking-widest transition-all duration-300 border",
-                isAdded
-                  ? "coke-panel border-coke"
-                  : "bg-transparent text-slate-700 border-slate-400 hover:border-coke hover:text-coke"
-              )}
-            >
-              {isAdded ? (
-                <>
-                  <Check className="w-5 h-5" /> Added to List
-                </>
-              ) : (
-                <>
-                  <Plus className="w-5 h-5" /> Add to List
-                </>
-              )}
-            </button>
-
-            {user.url && (
-              <a
-                href={user.url}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full flex items-center justify-center gap-3 px-8 py-5 text-sm font-black uppercase tracking-widest liquid-silver text-slate-700 border border-slate-400 hover:border-coke hover:text-coke transition-all"
-              >
-                View Profile
-              </a>
+            {user.description && (
+              <p className="mx-auto mt-5 max-w-2xl text-center text-sm leading-relaxed text-slate-600 sm:text-left">
+                {user.description}
+              </p>
             )}
+
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <button
+                onClick={() => toggleProfile(user, platform)}
+                aria-pressed={isAdded}
+                className={cn(
+                  "inline-flex flex-1 items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
+                  isAdded
+                    ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200 hover:bg-emerald-100"
+                    : "bg-brand-600 text-white shadow-sm shadow-brand-600/30 hover:bg-brand-700"
+                )}
+              >
+                {isAdded ? (
+                  <>
+                    <Check className="h-4 w-4" /> Added to list
+                  </>
+                ) : (
+                  <>
+                    <Plus className="h-4 w-4" /> Add to list
+                  </>
+                )}
+              </button>
+
+              {user.url && (
+                <a
+                  href={user.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+                >
+                  View on {meta.label} <ExternalLink className="h-4 w-4" />
+                </a>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-4 border-t border-slate-300 pt-16">
-          <StatBox icon={Users} label="Followers" value={formatFollowersDetail(user.followers)} />
-          <StatBox 
-            icon={Activity} 
-            label="Engagement Rate" 
-            value={formatEngagementRate(user.engagement_rate)} 
+        {/* Stats */}
+        <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
+          <StatCard
+            icon={Users}
+            label="Followers"
+            value={formatCompact(user.followers)}
           />
+          <StatCard
+            icon={Activity}
+            label="Engagement rate"
+            value={formatEngagementRate(user.engagement_rate)}
+          />
+          {user.engagements !== undefined && (
+            <StatCard
+              icon={Activity}
+              label="Engagements"
+              value={formatCompact(user.engagements)}
+            />
+          )}
           {user.posts_count !== undefined && (
-            <StatBox icon={LayoutGrid} label="Posts" value={user.posts_count} />
+            <StatCard
+              icon={LayoutGrid}
+              label="Posts"
+              value={formatCompact(user.posts_count)}
+            />
           )}
           {user.avg_likes !== undefined && (
-            <StatBox icon={Heart} label="Avg Likes" value={formatFollowersDetail(user.avg_likes)} />
+            <StatCard
+              icon={Heart}
+              label="Avg likes"
+              value={formatCompact(user.avg_likes)}
+            />
           )}
           {user.avg_comments !== undefined && (
-            <StatBox icon={MessageCircle} label="Avg Comments" value={user.avg_comments} />
+            <StatCard
+              icon={MessageCircle}
+              label="Avg comments"
+              value={formatCompact(user.avg_comments)}
+            />
           )}
           {user.avg_views !== undefined && user.avg_views > 0 && (
-            <StatBox icon={Eye} label="Avg Views" value={formatFollowersDetail(user.avg_views)} />
-          )}
-          {user.engagements !== undefined && (
-            <StatBox icon={Play} label="Engagements" value={formatFollowersDetail(user.engagements)} />
+            <StatCard
+              icon={Eye}
+              label="Avg views"
+              value={formatCompact(user.avg_views)}
+            />
           )}
         </div>
       </motion.div>
