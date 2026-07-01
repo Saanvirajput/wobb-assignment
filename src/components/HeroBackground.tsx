@@ -26,7 +26,7 @@ export function HeroBackground() {
         transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute -bottom-24 -right-16 h-80 w-80 rounded-full bg-amber-300/12 blur-[110px]"
+        className="absolute -bottom-24 -right-16 h-80 w-80 rounded-full bg-sky-300/14 blur-[110px]"
         animate={
           reduceMotion ? undefined : { x: [0, -16, 10, 0], y: [0, -10, 14, 0] }
         }

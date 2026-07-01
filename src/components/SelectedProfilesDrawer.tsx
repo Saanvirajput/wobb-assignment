@@ -52,13 +52,13 @@ export function SelectedProfilesDrawer() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        aria-label={`Open shortlist, ${count} ${
+        aria-label={`Open treasure list, ${count} ${
           count === 1 ? "creator" : "creators"
         } selected`}
         className="btn-pill relative inline-flex items-center gap-2 border border-ink-900/10 bg-white px-4 py-2 text-sm font-medium text-ink-900 shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:border-ink-900/20 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
       >
         <ListChecks className="h-4 w-4" />
-        <span className="hidden sm:inline">Shortlist</span>
+        <span className="hidden sm:inline">Treasure List</span>
         {count > 0 && (
           <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-600 px-1.5 text-xs font-bold text-white">
             {count}
@@ -80,7 +80,7 @@ export function SelectedProfilesDrawer() {
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="Selected creators shortlist"
+            aria-label="Selected creators treasure list"
             className={cn(
               "fixed inset-y-0 right-0 z-[101] flex w-full max-w-md flex-col bg-white shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
               isOpen ? "translate-x-0" : "translate-x-full"
@@ -89,7 +89,7 @@ export function SelectedProfilesDrawer() {
             <div className="flex items-center justify-between border-b border-ink-900/[0.06] px-6 py-4">
               <div>
                 <h2 className="text-lg font-semibold tracking-[-0.01em] text-ink-900">
-                  Shortlist
+                  Treasure List
                 </h2>
                 <p className="text-xs text-ink-400">
                   {count} {count === 1 ? "creator" : "creators"} selected
@@ -98,7 +98,7 @@ export function SelectedProfilesDrawer() {
               <button
                 ref={closeButtonRef}
                 onClick={() => setIsOpen(false)}
-                aria-label="Close shortlist"
+                aria-label="Close treasure list"
                 className="rounded-full p-2 text-ink-400 transition-colors hover:bg-slate-100 hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
               >
                 <X className="h-5 w-5" />
@@ -110,7 +110,7 @@ export function SelectedProfilesDrawer() {
                 <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
                   <FloatingSticker src={loadingHeart} className="h-14 w-14" />
                   <p className="font-semibold text-ink-900">
-                    Your shortlist is empty
+                    Your treasure list is empty
                   </p>
                   <p className="max-w-[16rem] text-sm text-ink-600">
                     Add creators from the search results to build your list.
@@ -147,7 +147,7 @@ export function SelectedProfilesDrawer() {
                       </div>
                       <button
                         onClick={() => removeProfile(profile.username)}
-                        aria-label={`Remove ${profile.username} from shortlist`}
+                        aria-label={`Remove ${profile.username} from treasure list`}
                         className="rounded-full p-2 text-ink-400 transition-colors hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                       >
                         <Trash2 className="h-4 w-4" />

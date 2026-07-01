@@ -93,7 +93,7 @@ export function SearchPage() {
         </span>
         <h1 className="mx-auto mt-6 max-w-2xl text-[2.75rem] font-semibold leading-[1.05] tracking-[-0.03em] text-ink-900 sm:text-6xl lg:text-7xl">
           Find the right{" "}
-          <span className="glow-text bg-gradient-to-r from-brand-600 to-violet-500 bg-clip-text text-transparent">
+          <span className="glow-text bg-gradient-to-r from-brand-600 to-teal-400 bg-clip-text text-transparent">
             creators
           </span>
           <br className="hidden sm:block" /> for your brand
