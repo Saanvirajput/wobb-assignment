@@ -28,7 +28,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-[#fbfbfd] px-6 text-ink-900">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-[#faf8f4] px-6 text-ink-900">
           <div className="card max-w-md p-10 text-center">
             <img
               src={nyanCat}

@@ -36,15 +36,18 @@
   }
 
   body {
-    background-color: #fbfbfd;
-    /* A very soft, low-saturation wash — quiet enough to disappear at a
-       glance, present enough to keep the page from feeling flat. */
+    background-color: #faf8f4;
+    /* A soft, warm wash blending the brand hue with the platform colors
+       (rose/amber/cyan) so the page reads as multi-color rather than a
+       single indigo accent on stark white. */
     background-image: radial-gradient(
         46rem 30rem at 12% -10%,
-        rgba(99, 102, 241, 0.08),
+        rgba(99, 102, 241, 0.09),
         transparent 60%
       ),
-      radial-gradient(38rem 26rem at 100% 0%, rgba(168, 85, 247, 0.06), transparent 55%);
+      radial-gradient(34rem 24rem at 100% 4%, rgba(244, 114, 182, 0.07), transparent 55%),
+      radial-gradient(30rem 22rem at 78% 92%, rgba(45, 212, 191, 0.07), transparent 55%),
+      radial-gradient(30rem 22rem at 6% 96%, rgba(251, 191, 36, 0.07), transparent 55%);
     background-attachment: fixed;
     background-repeat: no-repeat;
     color: var(--color-ink-900);
@@ -73,8 +76,8 @@
 /* ------------------------------------------------------------------ */
 @layer components {
   .card {
-    background-color: #ffffff;
-    border: 1px solid rgb(234 234 237);
+    background-color: #fffefc;
+    border: 1px solid rgb(235 231 224);
     border-radius: 1.25rem;
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03), 0 1px 1px rgba(15, 23, 42, 0.02);
     transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo),
@@ -83,7 +86,7 @@
 
   /* Frosted surface for the sticky header */
   .glass {
-    background-color: rgba(251, 251, 253, 0.8);
+    background-color: rgba(250, 248, 244, 0.8);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
   }
@@ -160,9 +163,9 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgb(210 210 215);
+  background: rgb(212 206 196);
   border-radius: 9999px;
-  border: 2px solid #fbfbfd;
+  border: 2px solid #faf8f4;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(170 170 178);

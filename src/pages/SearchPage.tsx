@@ -115,7 +115,7 @@ export function SearchPage() {
 
         <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-8 text-center">
           <div>
-            <div className="text-2xl font-semibold tracking-[-0.02em] text-ink-900">
+            <div className="text-2xl font-semibold tracking-[-0.02em] text-amber-600">
               <AnimatedNumber
                 value={catalogStats.creatorCount}
                 format={(n) => n.toString()}
@@ -128,7 +128,7 @@ export function SearchPage() {
           </div>
           <div className="h-8 w-px bg-ink-900/10" aria-hidden="true" />
           <div>
-            <div className="text-2xl font-semibold tracking-[-0.02em] text-ink-900">
+            <div className="text-2xl font-semibold tracking-[-0.02em] text-teal-600">
               <AnimatedNumber value={catalogStats.totalReach} format={formatCompact} />
               +
             </div>

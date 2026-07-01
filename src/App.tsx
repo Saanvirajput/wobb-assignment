@@ -15,7 +15,7 @@ const ProfileDetailPage = lazy(() =>
 
 function PageLoader() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#fbfbfd]">
+    <div className="flex min-h-screen items-center justify-center bg-[#faf8f4]">
       <div className="flex flex-col items-center gap-3">
         <img
           src={loadingHeart}

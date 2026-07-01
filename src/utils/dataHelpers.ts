@@ -14,23 +14,26 @@ export const PLATFORMS: Platform[] = ["instagram", "youtube", "tiktok"];
 /** Presentational metadata for each platform — keeps brand styling in one place. */
 export const PLATFORM_META: Record<
   Platform,
-  { label: string; badgeClass: string; dotClass: string }
+  { label: string; badgeClass: string; dotClass: string; textClass: string }
 > = {
   instagram: {
     label: "Instagram",
     badgeClass:
       "bg-gradient-to-tr from-amber-400 via-pink-600 to-purple-600 text-white",
     dotClass: "bg-pink-500",
+    textClass: "text-pink-600",
   },
   youtube: {
     label: "YouTube",
     badgeClass: "bg-red-600 text-white",
     dotClass: "bg-red-500",
+    textClass: "text-red-600",
   },
   tiktok: {
     label: "TikTok",
     badgeClass: "bg-slate-900 text-white",
     dotClass: "bg-cyan-400",
+    textClass: "text-cyan-600",
   },
 };
 

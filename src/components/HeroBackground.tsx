@@ -26,13 +26,22 @@ export function HeroBackground() {
         transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute -top-16 left-1/2 h-96 w-96 translate-x-[5%] rounded-full bg-violet-400/16 blur-[100px]"
+        className="absolute -top-16 left-1/2 h-96 w-96 translate-x-[5%] rounded-full bg-pink-400/14 blur-[100px]"
         animate={
           reduceMotion
             ? undefined
             : { x: [0, -22, 12, 0], y: [0, -12, 20, 0], scale: [1, 0.96, 1.07, 1] }
         }
         transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-0 left-1/4 h-80 w-80 translate-y-[40%] rounded-full bg-amber-300/14 blur-[100px]"
+        animate={
+          reduceMotion
+            ? undefined
+            : { x: [0, 18, -14, 0], y: [0, -10, 14, 0], scale: [1, 1.05, 0.95, 1] }
+        }
+        transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
       />
     </div>
   );

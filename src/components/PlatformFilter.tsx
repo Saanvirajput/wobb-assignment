@@ -70,7 +70,9 @@ export function PlatformFilter({
               onClick={() => onChange(p)}
               className={cn(
                 "relative z-10 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 sm:px-5",
-                isActive ? "text-ink-900" : "text-ink-600 hover:text-ink-900"
+                isActive
+                  ? PLATFORM_META[p].textClass
+                  : "text-ink-600 hover:text-ink-900"
               )}
             >
               {isActive && (
