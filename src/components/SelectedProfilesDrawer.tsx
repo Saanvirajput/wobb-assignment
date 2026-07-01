@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { createPortal } from "react-dom";
-import { X, Trash2, Users, Download, ListChecks } from "lucide-react";
+import { X, Trash2, Download, ListChecks } from "lucide-react";
 import { useListStore } from "@/store/useListStore";
 import { PLATFORM_META } from "@/utils/dataHelpers";
 import { formatCompact } from "@/utils/formatters";
 import { cn } from "@/utils/cn";
+import { FloatingSticker } from "./FloatingSticker";
+import loadingHeart from "@/assets/loading-heart.gif";
 
 export function SelectedProfilesDrawer() {
   const [isOpen, setIsOpen] = useState(false);
@@ -106,9 +108,7 @@ export function SelectedProfilesDrawer() {
             <div className="flex-1 overflow-y-auto p-4">
               {count === 0 ? (
                 <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-ink-400">
-                    <Users className="h-7 w-7" />
-                  </div>
+                  <FloatingSticker src={loadingHeart} className="h-14 w-14" />
                   <p className="font-semibold text-ink-900">
                     Your shortlist is empty
                   </p>
