@@ -5,7 +5,6 @@ import type { Platform, UserProfileSummary } from "@/types";
 import { Layout } from "@/components/Layout";
 import { PlatformFilter } from "@/components/PlatformFilter";
 import { ProfileList } from "@/components/ProfileList";
-import { HeroBackground } from "@/components/HeroBackground";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
 import { PLATFORMS, extractProfiles, filterProfiles } from "@/utils/dataHelpers";
 import { formatCompact } from "@/utils/formatters";
@@ -100,8 +99,6 @@ export function SearchPage() {
     <Layout>
       {/* Hero */}
       <section className="relative mx-auto mb-10 max-w-3xl px-4 pb-2 pt-12 text-center sm:px-0 sm:pt-16">
-        <HeroBackground />
-
         <motion.div variants={heroContainer} initial="hidden" animate="show">
           <motion.span
             variants={heroItem}

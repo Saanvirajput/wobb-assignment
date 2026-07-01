@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
+import { PageBackground } from "./PageBackground";
 import { SelectedProfilesDrawer } from "./SelectedProfilesDrawer";
 import { cn } from "@/utils/cn";
 
@@ -27,6 +28,8 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen flex flex-col font-sans text-slate-900">
+      <PageBackground />
+
       {/* Accessibility: jump straight to content with the keyboard */}
       <a
         href="#main-content"
