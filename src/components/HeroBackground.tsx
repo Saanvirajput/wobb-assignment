@@ -1,14 +1,11 @@
-import { motion, useReducedMotion } from "framer-motion";
-
 /**
- * Decorative, animated backdrop for the search hero — soft, slow-drifting
- * ambient light over a faint dot grid. Purely cosmetic (aria-hidden),
- * contained to its parent, and freezes when the user prefers reduced motion.
- * Deliberately quiet: the goal is depth, not decoration.
+ * The hero's dynamic background — an original animated "aurora": three large,
+ * softly-blurred colour fields that drift and breathe on slow, offset loops,
+ * layered over a faint dot grid. Pure CSS/SVG (no external assets), cosmetic
+ * only (aria-hidden), and frozen automatically under prefers-reduced-motion
+ * via the global rule in index.css.
  */
 export function HeroBackground() {
-  const reduceMotion = useReducedMotion();
-
   return (
     <div
       aria-hidden="true"
@@ -16,21 +13,29 @@ export function HeroBackground() {
     >
       <div className="dot-grid absolute inset-0" />
 
-      <motion.div
-        className="absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-brand-400/16 blur-[110px]"
-        animate={
-          reduceMotion
-            ? undefined
-            : { x: [0, 20, -16, 0], y: [0, 14, -8, 0] }
-        }
-        transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
+      <div
+        className="absolute left-1/2 top-[-20%] h-[32rem] w-[32rem] -translate-x-1/2 rounded-full blur-[120px]"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(37,99,235,0.30), transparent 70%)",
+          animation: "aurora-a 18s ease-in-out infinite",
+        }}
       />
-      <motion.div
-        className="absolute -bottom-24 -right-16 h-80 w-80 rounded-full bg-sky-300/14 blur-[110px]"
-        animate={
-          reduceMotion ? undefined : { x: [0, -16, 10, 0], y: [0, -10, 14, 0] }
-        }
-        transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
+      <div
+        className="absolute right-[8%] top-[-10%] h-[26rem] w-[26rem] rounded-full blur-[120px]"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(6,182,212,0.26), transparent 70%)",
+          animation: "aurora-b 22s ease-in-out infinite",
+        }}
+      />
+      <div
+        className="absolute left-[6%] top-[10%] h-[24rem] w-[24rem] rounded-full blur-[120px]"
+        style={{
+          background:
+            "radial-gradient(circle at center, rgba(129,140,248,0.22), transparent 70%)",
+          animation: "aurora-c 26s ease-in-out infinite",
+        }}
       />
     </div>
   );

@@ -5,8 +5,6 @@ import { Layout } from "@/components/Layout";
 import { PlatformFilter } from "@/components/PlatformFilter";
 import { ProfileList } from "@/components/ProfileList";
 import { HeroBackground } from "@/components/HeroBackground";
-import { HeroLandscape } from "@/components/HeroLandscape";
-import { CreatorMarquee } from "@/components/CreatorMarquee";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
 import { PLATFORMS, extractProfiles, filterProfiles } from "@/utils/dataHelpers";
 import { formatCompact } from "@/utils/formatters";
@@ -86,29 +84,27 @@ export function SearchPage() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative mx-auto mb-12 max-w-3xl overflow-hidden px-4 pb-12 pt-10 text-center sm:px-0 sm:pt-14">
+      <section className="relative mx-auto mb-10 max-w-3xl px-4 pb-2 pt-12 text-center sm:px-0 sm:pt-16">
         <HeroBackground />
-        <HeroLandscape />
 
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-ink-900/[0.06] bg-white/70 px-3.5 py-1.5 text-[13px] font-medium text-ink-600 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-          <span aria-hidden="true">✨</span> Creator discovery, reimagined
+        <span className="inline-flex items-center gap-2 rounded-full border border-ink-900/[0.07] bg-white/70 px-3.5 py-1.5 text-[13px] font-medium text-ink-600 shadow-[0_1px_2px_rgba(16,16,20,0.04)]">
+          <span className="h-1.5 w-1.5 rounded-full bg-brand-600" aria-hidden="true" />
+          Creator discovery platform
         </span>
-        <h1 className="mx-auto mt-6 max-w-2xl text-[2.75rem] font-semibold leading-[1.05] tracking-[-0.03em] text-ink-900 sm:text-6xl lg:text-7xl">
+        <h1 className="mx-auto mt-6 max-w-2xl text-[2.6rem] font-semibold leading-[1.06] tracking-[-0.035em] text-ink-900 sm:text-6xl">
           Find the right{" "}
-          <span className="glow-text bg-gradient-to-r from-brand-600 to-teal-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-600 to-cyan-500 bg-clip-text text-transparent">
             creators
-          </span>
-          <br className="hidden sm:block" /> for your brand
+          </span>{" "}
+          for your brand
         </h1>
-        <p className="mx-auto mt-6 max-w-md text-lg leading-relaxed text-ink-600 sm:text-xl">
-          Search and shortlist top voices across Instagram, YouTube, and TikTok
-          — all in one place.
+        <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-ink-600">
+          Search, compare, and shortlist top voices across Instagram, YouTube,
+          and TikTok — all in one place.
         </p>
 
-        <CreatorMarquee />
-
         <p className="mt-6 text-sm text-ink-400">
-          <span className="font-semibold text-amber-600">
+          <span className="font-semibold text-ink-900">
             <AnimatedNumber
               value={catalogStats.creatorCount}
               format={(n) => n.toString()}
@@ -116,7 +112,7 @@ export function SearchPage() {
             +
           </span>{" "}
           creators indexed ·{" "}
-          <span className="font-semibold text-teal-600">
+          <span className="font-semibold text-ink-900">
             <AnimatedNumber value={catalogStats.totalReach} format={formatCompact} />+
           </span>{" "}
           combined reach

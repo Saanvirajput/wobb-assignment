@@ -6,19 +6,19 @@ interface SparkleBurstProps {
 
 const PARTICLES = [
   { angle: -90, color: "bg-brand-500" },
-  { angle: -45, color: "bg-violet-500" },
+  { angle: -45, color: "bg-cyan-500" },
   { angle: 0, color: "bg-emerald-500" },
   { angle: 45, color: "bg-brand-400" },
-  { angle: 90, color: "bg-violet-400" },
+  { angle: 90, color: "bg-cyan-400" },
   { angle: 135, color: "bg-emerald-400" },
   { angle: 180, color: "bg-brand-500" },
-  { angle: -135, color: "bg-violet-500" },
+  { angle: -135, color: "bg-cyan-500" },
 ];
 
 /**
  * A small brand-colored particle burst — a self-contained, native stand-in
  * for the "celebratory reaction" a GIF would give, fired the moment a
- * creator is added to the treasure list. No external asset, no hotlink risk;
+ * creator is added to the shortlist. No external asset, no hotlink risk;
  * respects reduced motion.
  */
 export function SparkleBurst({ active }: SparkleBurstProps) {

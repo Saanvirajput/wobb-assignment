@@ -192,7 +192,7 @@ export function ProfileDetailPage() {
       >
         {/* Header card */}
         <div className="card overflow-hidden">
-          <div className="h-24 bg-gradient-to-r from-brand-600 to-teal-400" />
+          <div className="h-24 bg-gradient-to-r from-brand-600 to-cyan-500" />
           <div className="px-6 pb-6 sm:px-8 sm:pb-8">
             <div className="-mt-12 flex flex-col items-center text-center sm:flex-row sm:items-end sm:text-left">
               <div className="relative h-24 w-24 shrink-0">
