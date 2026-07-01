@@ -55,12 +55,12 @@ export function SelectedProfilesDrawer() {
         aria-label={`Open shortlist, ${count} ${
           count === 1 ? "creator" : "creators"
         } selected`}
-        className="btn-pill relative inline-flex items-center gap-2 border border-ink-900/10 bg-white px-4 py-2 text-sm font-medium text-ink-900 shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:border-ink-900/20 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+        className="btn-pill relative inline-flex items-center gap-2 border border-white/10 bg-white/[0.05] px-4 py-2 text-sm font-medium text-ink-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] hover:border-brand-400/40 hover:bg-white/[0.08] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0d]"
       >
         <ListChecks className="h-4 w-4" />
         <span className="hidden sm:inline">Shortlist</span>
         {count > 0 && (
-          <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-600 px-1.5 text-xs font-bold text-white">
+          <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-500 px-1.5 text-xs font-bold text-black">
             {count}
           </span>
         )}
@@ -70,7 +70,7 @@ export function SelectedProfilesDrawer() {
         <>
           <div
             className={cn(
-              "fixed inset-0 z-[100] bg-ink-900/30 backdrop-blur-sm transition-opacity duration-300 ease-out",
+              "fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm transition-opacity duration-300 ease-out",
               isOpen ? "opacity-100" : "pointer-events-none opacity-0"
             )}
             onClick={() => setIsOpen(false)}
@@ -82,11 +82,11 @@ export function SelectedProfilesDrawer() {
             aria-modal="true"
             aria-label="Selected creators shortlist"
             className={cn(
-              "fixed inset-y-0 right-0 z-[101] flex w-full max-w-md flex-col bg-white shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+              "fixed inset-y-0 right-0 z-[101] flex w-full max-w-md flex-col border-l border-white/10 bg-[#0e0e13] shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
               isOpen ? "translate-x-0" : "translate-x-full"
             )}
           >
-            <div className="flex items-center justify-between border-b border-ink-900/[0.06] px-6 py-4">
+            <div className="flex items-center justify-between border-b border-white/[0.07] px-6 py-4">
               <div>
                 <h2 className="text-lg font-semibold tracking-[-0.01em] text-ink-900">
                   Shortlist
@@ -99,7 +99,7 @@ export function SelectedProfilesDrawer() {
                 ref={closeButtonRef}
                 onClick={() => setIsOpen(false)}
                 aria-label="Close shortlist"
-                className="rounded-full p-2 text-ink-400 transition-colors hover:bg-slate-100 hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                className="rounded-full p-2 text-ink-400 transition-colors hover:bg-white/10 hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -121,13 +121,13 @@ export function SelectedProfilesDrawer() {
                   {selectedProfiles.map((profile) => (
                     <li
                       key={`${profile.platform}-${profile.username}`}
-                      className="flex items-center gap-3 rounded-2xl border border-ink-900/[0.06] p-3"
+                      className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.02] p-3"
                     >
                       <img
                         src={profile.picture}
                         alt={`${profile.username}'s avatar`}
                         loading="lazy"
-                        className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-slate-100"
+                        className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-white/10"
                       />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-semibold text-ink-900">
@@ -148,7 +148,7 @@ export function SelectedProfilesDrawer() {
                       <button
                         onClick={() => removeProfile(profile.username)}
                         aria-label={`Remove ${profile.username} from shortlist`}
-                        className="rounded-full p-2 text-ink-400 transition-colors hover:bg-red-50 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                        className="rounded-full p-2 text-ink-400 transition-colors hover:bg-red-500/15 hover:text-red-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -159,16 +159,16 @@ export function SelectedProfilesDrawer() {
             </div>
 
             {count > 0 && (
-              <div className="space-y-2 border-t border-ink-900/[0.06] p-4">
+              <div className="space-y-2 border-t border-white/[0.07] p-4">
                 <button
                   onClick={handleExport}
-                  className="btn-pill inline-flex w-full items-center justify-center gap-2 bg-ink-900 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+                  className="btn-gold btn-pill inline-flex w-full items-center justify-center gap-2 px-4 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e0e13]"
                 >
                   <Download className="h-4 w-4" /> Export as JSON
                 </button>
                 <button
                   onClick={clear}
-                  className="btn-pill inline-flex w-full items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-ink-400 hover:text-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                  className="btn-pill inline-flex w-full items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-ink-400 hover:text-red-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                 >
                   Clear all
                 </button>

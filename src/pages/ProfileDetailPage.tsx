@@ -192,12 +192,12 @@ export function ProfileDetailPage() {
       >
         {/* Header card */}
         <div className="card overflow-hidden">
-          <div className="h-24 bg-gradient-to-r from-brand-600 to-cyan-500" />
+          <div className="h-24 bg-gradient-to-r from-brand-700 via-brand-500 to-brand-300" />
           <div className="px-6 pb-6 sm:px-8 sm:pb-8">
             <div className="-mt-12 flex flex-col items-center text-center sm:flex-row sm:items-end sm:text-left">
               <div className="relative h-24 w-24 shrink-0">
                 {avatarFailed ? (
-                  <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-slate-100 text-3xl font-semibold text-ink-400 ring-4 ring-white">
+                  <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-white/[0.06] text-3xl font-semibold text-ink-400 ring-4 ring-[#131318]">
                     {(user.username || user.fullname || "?").charAt(0).toUpperCase()}
                   </div>
                 ) : (
@@ -207,7 +207,7 @@ export function ProfileDetailPage() {
                     onError={() =>
                       setAvatarState({ username: user.username, failed: true })
                     }
-                    className="h-24 w-24 rounded-2xl object-cover ring-4 ring-white"
+                    className="h-24 w-24 rounded-2xl object-cover ring-4 ring-[#131318]"
                   />
                 )}
                 {clipFrames.length > 0 && (
@@ -215,14 +215,14 @@ export function ProfileDetailPage() {
                     <MediaCycler
                       frames={clipFrames}
                       playing
-                      className="absolute inset-0 overflow-hidden rounded-2xl ring-4 ring-white"
+                      className="absolute inset-0 overflow-hidden rounded-2xl ring-4 ring-[#131318]"
                     />
                     <span
-                      className="absolute -left-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-ink-900 text-white ring-2 ring-white"
+                      className="absolute -left-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 text-black ring-2 ring-[#131318]"
                       title="Playing recent clips"
                       aria-hidden="true"
                     >
-                      <Play className="h-3 w-3 fill-white" strokeWidth={0} />
+                      <Play className="h-3 w-3 fill-black" strokeWidth={0} />
                     </span>
                   </>
                 )}
@@ -259,10 +259,10 @@ export function ProfileDetailPage() {
                 onClick={handleToggle}
                 aria-pressed={isAdded}
                 className={cn(
-                  "btn-pill relative inline-flex flex-1 items-center justify-center gap-2 px-5 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
+                  "btn-pill relative inline-flex flex-1 items-center justify-center gap-2 px-5 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#131318]",
                   isAdded
-                    ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200 hover:bg-emerald-100"
-                    : "bg-ink-900 text-white shadow-sm hover:bg-brand-600"
+                    ? "bg-emerald-500/10 text-emerald-300 ring-1 ring-inset ring-emerald-400/30 hover:bg-emerald-500/15"
+                    : "btn-gold"
                 )}
               >
                 <SparkleBurst active={burst} />
@@ -282,7 +282,7 @@ export function ProfileDetailPage() {
                   href={user.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-pill inline-flex flex-1 items-center justify-center gap-2 border border-ink-900/10 bg-white px-5 py-3 text-sm font-semibold text-ink-900 hover:border-ink-900/20 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+                  className="btn-pill inline-flex flex-1 items-center justify-center gap-2 border border-white/10 bg-white/[0.05] px-5 py-3 text-sm font-semibold text-ink-900 hover:border-brand-400/40 hover:bg-white/[0.08] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#131318]"
                 >
                   View on {meta.label} <ExternalLink className="h-4 w-4" />
                 </a>

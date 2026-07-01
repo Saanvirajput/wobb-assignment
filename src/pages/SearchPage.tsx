@@ -102,20 +102,20 @@ export function SearchPage() {
         <motion.div variants={heroContainer} initial="hidden" animate="show">
           <motion.span
             variants={heroItem}
-            className="inline-flex items-center gap-2 rounded-full border border-ink-900/[0.07] bg-white/70 px-3.5 py-1.5 text-[13px] font-medium text-ink-600 shadow-[0_1px_2px_rgba(16,16,20,0.04)]"
+            className="inline-flex items-center gap-2 rounded-full border border-brand-400/25 bg-brand-400/[0.08] px-3.5 py-1.5 text-[13px] font-medium text-brand-200 shadow-[0_0_20px_-6px_rgba(221,173,76,0.4)]"
           >
             <span
-              className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-600"
+              className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-400"
               aria-hidden="true"
             />
             Creator discovery platform
           </motion.span>
           <motion.h1
             variants={heroItem}
-            className="mx-auto mt-6 max-w-2xl text-[2.6rem] font-semibold leading-[1.06] tracking-[-0.035em] text-ink-900 sm:text-6xl"
+            className="glow-heading mx-auto mt-6 max-w-2xl text-[2.6rem] font-semibold leading-[1.06] tracking-[-0.035em] text-ink-900 sm:text-6xl"
           >
             Find the right{" "}
-            <span className="text-shimmer bg-gradient-to-r from-brand-600 via-cyan-500 to-brand-600 bg-clip-text text-transparent">
+            <span className="text-shimmer bg-gradient-to-r from-brand-300 via-brand-100 to-brand-400 bg-clip-text text-transparent">
               creators
             </span>{" "}
             for your brand
@@ -166,7 +166,7 @@ export function SearchPage() {
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
             aria-label="Sort creators"
-            className="cursor-pointer appearance-none rounded-full border border-ink-900/10 bg-white py-2 pl-9 pr-9 text-sm font-medium text-ink-600 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors duration-300 hover:border-ink-900/20 hover:text-ink-900 focus:border-brand-500/40 focus:outline-none focus:ring-4 focus:ring-brand-500/10"
+            className="cursor-pointer appearance-none rounded-full border border-white/10 bg-white/[0.04] py-2 pl-9 pr-9 text-sm font-medium text-ink-600 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-colors duration-300 hover:border-white/20 hover:text-ink-900 focus:border-brand-500/50 focus:outline-none focus:ring-4 focus:ring-brand-500/15 [&>option]:bg-[#131318] [&>option]:text-ink-900"
           >
             {SORT_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>

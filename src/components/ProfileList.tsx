@@ -26,7 +26,7 @@ const item = {
 export function ProfileList({ profiles, platform }: ProfileListProps) {
   if (profiles.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-ink-900/10 bg-white/50 py-20 text-center">
+      <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] py-20 text-center">
         <FloatingSticker src={loadingHeart} className="mb-4 h-14 w-14" />
         <p className="text-lg font-semibold text-ink-900">No creators found</p>
         <p className="mt-1 text-sm text-ink-600">

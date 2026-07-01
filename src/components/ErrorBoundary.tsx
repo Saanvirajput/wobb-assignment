@@ -28,7 +28,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-[#faf8f4] px-6 text-ink-900">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-[#0a0a0d] px-6 text-ink-900">
           <div className="card max-w-md p-10 text-center">
             <img
               src={nyanCat}
@@ -47,7 +47,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
                 this.setState({ hasError: false, error: null });
                 window.location.href = import.meta.env.BASE_URL;
               }}
-              className="btn-pill mt-6 inline-flex items-center justify-center bg-ink-900 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-brand-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+              className="btn-gold btn-pill mt-6 inline-flex items-center justify-center px-6 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0d]"
             >
               Back to home
             </button>

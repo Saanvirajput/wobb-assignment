@@ -61,12 +61,12 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
       role="button"
       tabIndex={0}
       aria-label={`View ${profile.fullname} (@${profile.username})`}
-      className="card group flex cursor-pointer flex-col p-6 hover:-translate-y-1 hover:border-ink-900/[0.08] hover:shadow-[0_20px_40px_-12px_rgba(15,23,42,0.12)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+      className="card group flex cursor-pointer flex-col p-6 hover:-translate-y-1 hover:border-brand-500/40 hover:shadow-[0_24px_50px_-20px_rgba(210,154,47,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0d]"
     >
       <div className="flex items-start gap-4">
         <div className="relative shrink-0">
           {imgFailed ? (
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 text-lg font-semibold text-ink-400 ring-2 ring-slate-100">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/[0.06] text-lg font-semibold text-ink-400 ring-2 ring-white/10">
               {(profile.username || profile.fullname || "?").charAt(0).toUpperCase()}
             </div>
           ) : (
@@ -75,22 +75,22 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
               alt={`${profile.username}'s avatar`}
               loading="lazy"
               onError={() => setImgFailed(true)}
-              className="h-16 w-16 rounded-full object-cover ring-2 ring-slate-100"
+              className="h-16 w-16 rounded-full object-cover ring-2 ring-white/10"
             />
           )}
           {linked && <CreatorClip username={profile.username} active={hovered} />}
           {linked && (
             <span
-              className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-ink-900 text-white ring-2 ring-white"
+              className="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-brand-500 text-black ring-2 ring-[#131318]"
               title="Recent clips available"
               aria-hidden="true"
             >
-              <Play className="h-2.5 w-2.5 fill-white" strokeWidth={0} />
+              <Play className="h-2.5 w-2.5 fill-black" strokeWidth={0} />
             </span>
           )}
           <span
             className={cn(
-              "absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full ring-2 ring-white",
+              "absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full ring-2 ring-[#131318]",
               meta.dotClass
             )}
             aria-hidden="true"
@@ -116,7 +116,7 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
         </div>
       </div>
 
-      <dl className="mt-5 grid grid-cols-2 gap-3 border-t border-ink-900/[0.06] pt-4">
+      <dl className="mt-5 grid grid-cols-2 gap-3 border-t border-white/[0.07] pt-4">
         <div>
           <dt className="flex items-center gap-1 text-xs font-medium text-ink-400">
             <Users className="h-3.5 w-3.5" /> Followers
@@ -142,10 +142,10 @@ function ProfileCardComponent({ profile, platform }: ProfileCardProps) {
             : `Add ${profile.username} to list`
         }
         className={cn(
-          "btn-pill relative mt-5 inline-flex w-full items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
+          "btn-pill relative mt-5 inline-flex w-full items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#131318]",
           isAdded
-            ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200 hover:bg-emerald-100"
-            : "bg-ink-900 text-white shadow-sm hover:bg-brand-600"
+            ? "bg-emerald-500/10 text-emerald-300 ring-1 ring-inset ring-emerald-400/30 hover:bg-emerald-500/15"
+            : "btn-gold"
         )}
       >
         <SparkleBurst active={burst} />

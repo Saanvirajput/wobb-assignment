@@ -25,7 +25,7 @@ export function PageBackground() {
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(40rem 26rem at 50% -10%, rgba(37,99,235,0.22), transparent 60%), radial-gradient(30rem 22rem at 100% 0%, rgba(6,182,212,0.18), transparent 55%), radial-gradient(28rem 22rem at 0% 30%, rgba(129,140,248,0.16), transparent 55%)",
+              "radial-gradient(40rem 26rem at 50% -10%, rgba(230,194,116,0.20), transparent 60%), radial-gradient(30rem 22rem at 100% 0%, rgba(124,92,255,0.16), transparent 55%), radial-gradient(28rem 22rem at 0% 30%, rgba(37,99,235,0.14), transparent 55%)",
           }}
         />
       ) : (
@@ -36,8 +36,16 @@ export function PageBackground() {
         />
       )}
 
-      {/* Readability wash — softens the aurora so foreground stays crisp. */}
-      <div className="absolute inset-0 bg-[#fcfcfd]/55" />
+      {/* Readability wash — darkens the aurora so foreground stays crisp,
+          plus a subtle vignette to draw the eye toward the centre. */}
+      <div className="absolute inset-0 bg-[#0a0a0d]/55" />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 60% at 50% 40%, transparent 40%, rgba(10,10,13,0.55) 100%)",
+        }}
+      />
     </div>
   );
 }
