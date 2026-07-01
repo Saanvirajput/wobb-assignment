@@ -88,6 +88,13 @@
     mask-image: radial-gradient(ellipse 60% 55% at 50% 40%, #000 30%, transparent 78%);
   }
 
+  /* Animated gradient text — a wide gradient slowly sweeping across the
+     word, giving the hero a living highlight without any layout motion. */
+  .text-shimmer {
+    background-size: 220% auto;
+    animation: text-shimmer 5s linear infinite;
+  }
+
   /* A pill button with a subtle press feedback. */
   .btn-pill {
     border-radius: 9999px;
@@ -114,6 +121,12 @@
   }
   to {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes text-shimmer {
+  to {
+    background-position: 220% center;
   }
 }
 

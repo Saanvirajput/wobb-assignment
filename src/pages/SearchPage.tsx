@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { motion } from "framer-motion";
 import { ArrowUpDown } from "lucide-react";
 import type { Platform, UserProfileSummary } from "@/types";
 import { Layout } from "@/components/Layout";
@@ -8,6 +9,20 @@ import { HeroBackground } from "@/components/HeroBackground";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
 import { PLATFORMS, extractProfiles, filterProfiles } from "@/utils/dataHelpers";
 import { formatCompact } from "@/utils/formatters";
+
+const heroContainer = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
+};
+
+const heroItem = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
 
 type SortOption =
   | "default"
@@ -87,36 +102,51 @@ export function SearchPage() {
       <section className="relative mx-auto mb-10 max-w-3xl px-4 pb-2 pt-12 text-center sm:px-0 sm:pt-16">
         <HeroBackground />
 
-        <span className="inline-flex items-center gap-2 rounded-full border border-ink-900/[0.07] bg-white/70 px-3.5 py-1.5 text-[13px] font-medium text-ink-600 shadow-[0_1px_2px_rgba(16,16,20,0.04)]">
-          <span className="h-1.5 w-1.5 rounded-full bg-brand-600" aria-hidden="true" />
-          Creator discovery platform
-        </span>
-        <h1 className="mx-auto mt-6 max-w-2xl text-[2.6rem] font-semibold leading-[1.06] tracking-[-0.035em] text-ink-900 sm:text-6xl">
-          Find the right{" "}
-          <span className="bg-gradient-to-r from-brand-600 to-cyan-500 bg-clip-text text-transparent">
-            creators
-          </span>{" "}
-          for your brand
-        </h1>
-        <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-ink-600">
-          Search, compare, and shortlist top voices across Instagram, YouTube,
-          and TikTok — all in one place.
-        </p>
-
-        <p className="mt-6 text-sm text-ink-400">
-          <span className="font-semibold text-ink-900">
-            <AnimatedNumber
-              value={catalogStats.creatorCount}
-              format={(n) => n.toString()}
+        <motion.div variants={heroContainer} initial="hidden" animate="show">
+          <motion.span
+            variants={heroItem}
+            className="inline-flex items-center gap-2 rounded-full border border-ink-900/[0.07] bg-white/70 px-3.5 py-1.5 text-[13px] font-medium text-ink-600 shadow-[0_1px_2px_rgba(16,16,20,0.04)]"
+          >
+            <span
+              className="h-1.5 w-1.5 animate-pulse rounded-full bg-brand-600"
+              aria-hidden="true"
             />
-            +
-          </span>{" "}
-          creators indexed ·{" "}
-          <span className="font-semibold text-ink-900">
-            <AnimatedNumber value={catalogStats.totalReach} format={formatCompact} />+
-          </span>{" "}
-          combined reach
-        </p>
+            Creator discovery platform
+          </motion.span>
+          <motion.h1
+            variants={heroItem}
+            className="mx-auto mt-6 max-w-2xl text-[2.6rem] font-semibold leading-[1.06] tracking-[-0.035em] text-ink-900 sm:text-6xl"
+          >
+            Find the right{" "}
+            <span className="text-shimmer bg-gradient-to-r from-brand-600 via-cyan-500 to-brand-600 bg-clip-text text-transparent">
+              creators
+            </span>{" "}
+            for your brand
+          </motion.h1>
+          <motion.p
+            variants={heroItem}
+            className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-ink-600"
+          >
+            Search, compare, and shortlist top voices across Instagram, YouTube,
+            and TikTok — all in one place.
+          </motion.p>
+
+          <motion.p variants={heroItem} className="mt-6 text-sm text-ink-400">
+            <span className="font-semibold text-ink-900">
+              <AnimatedNumber
+                value={catalogStats.creatorCount}
+                format={(n) => n.toString()}
+              />
+              +
+            </span>{" "}
+            creators indexed ·{" "}
+            <span className="font-semibold text-ink-900">
+              <AnimatedNumber value={catalogStats.totalReach} format={formatCompact} />
+              +
+            </span>{" "}
+            combined reach
+          </motion.p>
+        </motion.div>
       </section>
 
       <PlatformFilter
