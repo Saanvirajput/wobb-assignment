@@ -18,6 +18,7 @@ import { Layout } from "@/components/Layout";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
 import { MediaCycler } from "@/components/MediaCycler";
 import { SparkleBurst } from "@/components/SparkleBurst";
+import loadingHeart from "@/assets/loading-heart.gif";
 import type { FullUserProfile, ProfileDetailResponse, Platform } from "@/types";
 import { formatCompact, formatEngagementRate } from "@/utils/formatters";
 import { extractClipFrames, loadProfileByUsername } from "@/utils/profileLoader";
@@ -143,8 +144,14 @@ export function ProfileDetailPage() {
         <div className="mb-8">
           <BackLink />
         </div>
-        <div className="flex justify-center py-32">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-ink-900/10 border-t-brand-600" />
+        <div className="flex flex-col items-center justify-center gap-3 py-28">
+          <img
+            src={loadingHeart}
+            alt=""
+            aria-hidden="true"
+            className="h-14 w-14 rounded-2xl object-cover shadow-[0_4px_16px_rgba(15,23,42,0.08)]"
+          />
+          <span className="sr-only">Loading profile…</span>
         </div>
       </Layout>
     );

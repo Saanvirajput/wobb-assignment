@@ -1,5 +1,6 @@
 import { Component } from "react";
 import type { ErrorInfo, ReactNode } from "react";
+import nyanCat from "@/assets/easter-egg-nyancat.gif";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -29,6 +30,12 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-[#fbfbfd] px-6 text-ink-900">
           <div className="card max-w-md p-10 text-center">
+            <img
+              src={nyanCat}
+              alt=""
+              aria-hidden="true"
+              className="mx-auto mb-5 h-20 w-auto rounded-xl shadow-[0_4px_16px_rgba(15,23,42,0.1)]"
+            />
             <h1 className="text-2xl font-semibold tracking-[-0.02em]">
               Something went wrong
             </h1>

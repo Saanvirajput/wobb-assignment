@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import loadingHeart from "@/assets/loading-heart.gif";
 
 // Lazy-load route-level components for code splitting
 const SearchPage = lazy(() =>
@@ -14,8 +15,16 @@ const ProfileDetailPage = lazy(() =>
 
 function PageLoader() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50">
-      <div className="h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-brand-600" />
+    <div className="flex min-h-screen items-center justify-center bg-[#fbfbfd]">
+      <div className="flex flex-col items-center gap-3">
+        <img
+          src={loadingHeart}
+          alt=""
+          aria-hidden="true"
+          className="h-14 w-14 rounded-2xl object-cover shadow-[0_4px_16px_rgba(15,23,42,0.08)]"
+        />
+        <span className="sr-only">Loading…</span>
+      </div>
     </div>
   );
 }
