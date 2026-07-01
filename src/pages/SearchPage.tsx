@@ -7,10 +7,8 @@ import { ProfileList } from "@/components/ProfileList";
 import { HeroBackground } from "@/components/HeroBackground";
 import { CreatorMarquee } from "@/components/CreatorMarquee";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
-import { FloatingSticker } from "@/components/FloatingSticker";
 import { PLATFORMS, extractProfiles, filterProfiles } from "@/utils/dataHelpers";
 import { formatCompact } from "@/utils/formatters";
-import loadingHeart from "@/assets/loading-heart.gif";
 
 type SortOption =
   | "default"
@@ -87,18 +85,12 @@ export function SearchPage() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative mx-auto mb-14 max-w-3xl overflow-hidden px-4 pb-4 pt-10 text-center sm:px-0 sm:pt-16">
+      <section className="relative mx-auto mb-12 max-w-3xl overflow-hidden px-4 pb-4 pt-10 text-center sm:px-0 sm:pt-14">
         <HeroBackground />
 
-        <div className="relative inline-block">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-ink-900/[0.06] bg-white/70 px-3.5 py-1.5 text-[13px] font-medium text-ink-600 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-            <span aria-hidden="true">✨</span> Creator discovery, reimagined
-          </span>
-          <FloatingSticker
-            src={loadingHeart}
-            className="absolute -right-9 -top-8 h-10 w-10 sm:-right-11 sm:-top-10 sm:h-12 sm:w-12"
-          />
-        </div>
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-ink-900/[0.06] bg-white/70 px-3.5 py-1.5 text-[13px] font-medium text-ink-600 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+          <span aria-hidden="true">✨</span> Creator discovery, reimagined
+        </span>
         <h1 className="mx-auto mt-6 max-w-2xl text-[2.75rem] font-semibold leading-[1.05] tracking-[-0.03em] text-ink-900 sm:text-6xl lg:text-7xl">
           Find the right{" "}
           <span className="glow-text bg-gradient-to-r from-brand-600 to-violet-500 bg-clip-text text-transparent">
@@ -113,30 +105,20 @@ export function SearchPage() {
 
         <CreatorMarquee />
 
-        <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-8 text-center">
-          <div>
-            <div className="text-2xl font-semibold tracking-[-0.02em] text-amber-600">
-              <AnimatedNumber
-                value={catalogStats.creatorCount}
-                format={(n) => n.toString()}
-              />
-              +
-            </div>
-            <div className="mt-0.5 text-xs font-medium text-ink-400">
-              Creators indexed
-            </div>
-          </div>
-          <div className="h-8 w-px bg-ink-900/10" aria-hidden="true" />
-          <div>
-            <div className="text-2xl font-semibold tracking-[-0.02em] text-teal-600">
-              <AnimatedNumber value={catalogStats.totalReach} format={formatCompact} />
-              +
-            </div>
-            <div className="mt-0.5 text-xs font-medium text-ink-400">
-              Combined reach
-            </div>
-          </div>
-        </div>
+        <p className="mt-6 text-sm text-ink-400">
+          <span className="font-semibold text-amber-600">
+            <AnimatedNumber
+              value={catalogStats.creatorCount}
+              format={(n) => n.toString()}
+            />
+            +
+          </span>{" "}
+          creators indexed ·{" "}
+          <span className="font-semibold text-teal-600">
+            <AnimatedNumber value={catalogStats.totalReach} format={formatCompact} />+
+          </span>{" "}
+          combined reach
+        </p>
       </section>
 
       <PlatformFilter

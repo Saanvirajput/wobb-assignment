@@ -100,13 +100,14 @@
     mask-image: radial-gradient(ellipse 55% 55% at 50% 35%, #000 35%, transparent 75%);
   }
 
-  /* Soft glow behind the gradient headline text — restrained, not neon.
-     drop-shadow (not text-shadow) so it follows the glyph alpha even
-     with a transparent, background-clip: text fill. */
+  /* Soft, static glow behind the gradient headline text — restrained, not
+     neon, and not pulsing (a looping glow reads as trying too hard on a
+     headline you look at for more than a second). drop-shadow (not
+     text-shadow) so it follows the glyph alpha even with a transparent,
+     background-clip: text fill. */
   .glow-text {
-    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.22))
-      drop-shadow(0 0 24px rgba(168, 85, 247, 0.12));
-    animation: glow-pulse 6s var(--ease-out-expo) infinite;
+    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.18))
+      drop-shadow(0 0 22px rgba(168, 85, 247, 0.1));
   }
 
   /* A pill button with Apple-style press feedback. */
@@ -137,18 +138,6 @@
   }
   to {
     transform: translateX(-50%);
-  }
-}
-
-@keyframes glow-pulse {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.18))
-      drop-shadow(0 0 18px rgba(168, 85, 247, 0.1));
-  }
-  50% {
-    filter: drop-shadow(0 0 14px rgba(99, 102, 241, 0.3))
-      drop-shadow(0 0 30px rgba(168, 85, 247, 0.18));
   }
 }
 
