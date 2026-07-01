@@ -5,6 +5,7 @@ import { Layout } from "@/components/Layout";
 import { PlatformFilter } from "@/components/PlatformFilter";
 import { ProfileList } from "@/components/ProfileList";
 import { HeroBackground } from "@/components/HeroBackground";
+import { HeroLandscape } from "@/components/HeroLandscape";
 import { CreatorMarquee } from "@/components/CreatorMarquee";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
 import { PLATFORMS, extractProfiles, filterProfiles } from "@/utils/dataHelpers";
@@ -85,8 +86,9 @@ export function SearchPage() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative mx-auto mb-12 max-w-3xl overflow-hidden px-4 pb-4 pt-10 text-center sm:px-0 sm:pt-14">
+      <section className="relative mx-auto mb-12 max-w-3xl overflow-hidden px-4 pb-12 pt-10 text-center sm:px-0 sm:pt-14">
         <HeroBackground />
+        <HeroLandscape />
 
         <span className="inline-flex items-center gap-1.5 rounded-full border border-ink-900/[0.06] bg-white/70 px-3.5 py-1.5 text-[13px] font-medium text-ink-600 shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
           <span aria-hidden="true">✨</span> Creator discovery, reimagined
